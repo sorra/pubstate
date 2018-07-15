@@ -1,0 +1,25 @@
+nav#navbar.navbar.navbar-default.navbar-inverse(role="navigation")
+  #navbar-content.container-fluid
+    .navbar-header
+      button.navbar-toggle(type="button", data-toggle="collapse", data-target="#nav-collapse")
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.nav-brand(href="/") PubState
+    #nav-collapse.navbar-collapse.collapse
+      ul.nav-links.nav.navbar-nav.navbar-right
+        li
+          form#search(action="/search", method="get", accept-charset="UTF-8")
+            input(name="q", type="text", place-holder="Search")
+            button.glyphicon.glyphicon-search(type="submit")
+        li
+          a#nav-tags(href="javascript:;") Tags
+        li
+          a(href="/articles") Articles
+        li
+          a.glyphicon.glyphicon-pencil(href="/articles/new", title="Write")
+
+#back-to-top
+  span.glyphicon.glyphicon-arrow-up(aria-hidden="true")
+#alerts-holder

@@ -1,0 +1,17 @@
+doctype html
+html
+  include common.jade
+  head
+    +header
+    title Articles
+  body
+    include navbar.jade
+    #container.container
+      for article in articles
+        ol#articles
+          li.article
+            h3= article.title
+            div
+              +userLabel(article.author)
+              +humanTimeLabel(article.whenCreated)
+    +footer

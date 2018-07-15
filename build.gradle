@@ -1,0 +1,83 @@
+group 'com.pubstate'
+version '1.0-SNAPSHOT'
+
+buildscript {
+  ext {
+    kotlinVersion = '1.2.51'
+    springBootVersion = '2.0.3.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}"
+    classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'org.springframework.boot'
+apply plugin: "kotlin-allopen"
+apply plugin: "kotlin-spring"
+apply plugin: "kotlin-noarg"
+
+jar {
+  baseName = 'pubstate'
+}
+springBoot {
+  mainClassName = 'com.pubstate.boot.PubstateKt'
+}
+
+sourceCompatibility = 1.8
+compileJava.options.compilerArgs.add '-parameters'
+compileTestJava.options.compilerArgs.add '-parameters'
+compileKotlin.kotlinOptions.jvmTarget = '1.8'
+compileTestKotlin.kotlinOptions.jvmTarget = '1.8'
+
+noArg {
+  annotation("com.pubstate.annotation.KotlinNoArg")
+}
+
+repositories {
+  mavenCentral()
+}
+
+ext {
+  cmarkVersion = '0.9.0'
+}
+
+dependencies {
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+  compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+
+  compile "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+  compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+
+  runtime 'mysql:mysql-connector-java:5.1.38'
+
+  compile('org.avaje.ebeanorm:avaje-ebeanorm:7.9.1') {
+    exclude group: 'org.slf4j', module: 'slf4j-api'
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
+  }
+  compile 'org.avaje.ebeanorm:avaje-ebeanorm-agent:4.9.2'
+  compile 'org.avaje:avaje-agentloader:2.1.2'
+
+  compile 'org.apache.commons:commons-lang3:3.5'
+  compile 'commons-fileupload:commons-fileupload:1.3.1'
+
+  compile 'de.neuland-bfi:jade4j:1.2.7'
+  compile 'de.neuland-bfi:spring-jade4j:1.2.7'
+
+  compile 'org.jasypt:jasypt:1.9.2'
+  compile 'org.jsoup:jsoup:1.10.2'
+  compile "com.atlassian.commonmark:commonmark:${cmarkVersion}"
+  compile "com.atlassian.commonmark:commonmark-ext-autolink:${cmarkVersion}"
+  compile "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:${cmarkVersion}"
+  compile "com.atlassian.commonmark:commonmark-ext-gfm-tables:${cmarkVersion}"
+  compile "com.atlassian.commonmark:commonmark-ext-heading-anchor:${cmarkVersion}"
+
+  testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
