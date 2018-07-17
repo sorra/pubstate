@@ -10,9 +10,7 @@ import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-const val SCOPE_REQUEST = WebApplicationContext.SCOPE_REQUEST
-
-@Scope(SCOPE_REQUEST)
+@Scope(WebApplicationContext.SCOPE_REQUEST)
 abstract class BaseController : HasServices() {
   @Autowired
   protected lateinit var request: HttpServletRequest

@@ -13,8 +13,8 @@ mixin header
     for rs in DevMode.cssFiles()
       +css(rs)
   else
-    +css("/static/css/libs.css")
-    +css("/static/css/all.css")
+    +css("/static/css/libs.min.css")
+    +css("/static/css/all.min.css")
 
 mixin footer
   footer
@@ -23,8 +23,8 @@ mixin footer
     for rs in DevMode.jsFiles()
       +js(rs)
   else
-    +js("/static/js/libs.js")
-    +js("/static/js/all.js")
+    +js("/static/js/libs.min.js")
+    +js("/static/js/all.min.js")
 
 mixin userLabel(u)
   span.user-label(data-id=u.id)

@@ -8,7 +8,7 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 
 class AccessLoggingFilter : javax.servlet.Filter {
-  private val log = LoggerFactory.getLogger(javaClass)
+  private val logger = LoggerFactory.getLogger(javaClass)
 
   override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
     var msg: String? = null
@@ -23,7 +23,7 @@ class AccessLoggingFilter : javax.servlet.Filter {
     } finally {
       if (msg != null) {
         val timeCost = System.currentTimeMillis() - timeStart
-        log.info("${timeCost}ms $msg")
+        logger.info("${timeCost}ms $msg")
       }
     }
   }
