@@ -42,6 +42,13 @@ class WebViewConfig {
     return configuration
   }
 
+  @Bean
+  fun viewResolver(): ViewResolver {
+    val viewResolver = JadeViewResolver()
+    viewResolver.setConfiguration(jadeConfiguration())
+    return viewResolver
+  }
+
   private fun isDev() = profile == "dev"
 
   private fun helpers(): Map<String, *> {
@@ -54,13 +61,6 @@ class WebViewConfig {
     }
 
     return Collections.unmodifiableMap(helpers)
-  }
-
-  @Bean
-  fun viewResolver(): ViewResolver {
-    val viewResolver = JadeViewResolver()
-    viewResolver.setConfiguration(jadeConfiguration())
-    return viewResolver
   }
 
   class ResourceHelper {

@@ -1,0 +1,13 @@
+doctype html
+html
+  include common.jade
+  head
+    +header
+    block customHeader
+      title PubState
+  body
+    include navbar.jade
+    #container.container
+      block mainContent
+    +footer
+    block customFooter

@@ -1,0 +1,30 @@
+extends layout.jade
+
+block customHeader
+  title Login
+  style.
+    .heading{
+      text-align: center;
+      padding: 10px;
+      color: deepskyblue;
+    }
+
+block mainContent
+  form.auth_form(action="/login", method="post")
+    h3.heading Login
+    .input-group
+      label(for="email") Email
+      input#email(name="email", type="text")
+    .input-group
+      label(for="password") Password
+      input#password(name="password", type="password")
+    .input-group
+      label(for="remember_me", title="Attention: don't enable this on public computers", data-toggle="tooltip")
+        input#remember_me(name="rememberMe", type="checkbox", checked="")
+        |  Remember me
+    .auth_acts.input-group
+      button.btn.btn-block.btn-lg.btn-danger(type="submit")
+        span.small-circle
+          i.fa.fa-caret-right
+        small Login
+      a.btn(href="/signup") Create new account

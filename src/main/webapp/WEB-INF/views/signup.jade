@@ -1,0 +1,32 @@
+extends layout.jade
+
+block customHeader
+  title Signup
+  style.
+    .heading {
+      text-align: center;
+      padding: 10px;
+      color: green;
+    }
+
+block mainContent
+  form.auth_form(action="/signup", method="post")
+    h3.heading Signup
+    .input-group
+      label(for="email") Email
+      input#email(name="email", type="text")
+    .input-group
+      label(for="name") Name
+      input#name(name="name", type="text")
+    .input-group
+      label(for="password") Password
+      input#password(name="password", type="password")
+    .input-group
+      label(for="repeat_password") Repeat password
+      input#repeat_password(name="repeatPassword", type="password")
+    .auth_acts.input-group
+      button.btn.btn-block.btn-lg.btn-danger(type="submit")
+        span.small-circle
+          i.fa.fa-caret-right
+        small Signup
+      a.btn(href="/login") Login with an existing account

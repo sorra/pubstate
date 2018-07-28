@@ -1,0 +1,10 @@
+extends layout.jade
+
+block customHeader
+  title= reason
+
+block mainContent
+  #main-box(style="text-align: center; margin-top: 50px")
+    p HTTP Error #{errorCode}
+    p= reason
+    a(href="/") Go to homepage

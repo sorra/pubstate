@@ -1,24 +1,45 @@
 nav#navbar.navbar.navbar-default.navbar-inverse(role="navigation")
-  #navbar-content.container-fluid
+  #navbar_content.container-fluid
     .navbar-header
-      button.navbar-toggle(type="button", data-toggle="collapse", data-target="#nav-collapse")
+      button.navbar-toggle(type="button", data-toggle="collapse", data-target="#nav_collapse")
         span.sr-only Toggle navigation
         span.icon-bar
         span.icon-bar
         span.icon-bar
       a.nav-brand(href="/") PubState
-    #nav-collapse.navbar-collapse.collapse
-      ul.nav-links.nav.navbar-nav.navbar-right
+    #nav_collapse.navbar-collapse.collapse
+      ul.nav_links.nav.navbar-nav.navbar-right
         li
           form#search(action="/search", method="get", accept-charset="UTF-8")
             input(name="q", type="text", place-holder="Search")
             button.glyphicon.glyphicon-search(type="submit")
         li
-          a#nav-tags(href="javascript:;") Tags
+          a#nav_tags(href="javascript:;") Tags
         li
           a(href="/articles") Articles
         li
           a.glyphicon.glyphicon-pencil(href="/articles/new", title="Write")
+        if userSelf != null
+          li
+            a#nav_user_self(href="/users/self", title="My space")= userSelf.name
+          li
+            span.dropdown
+              a#user_dropdown_menu.dropdown-toggle(href="javascript:;", data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")
+                span.glyphicon.glyphicon-cog(title="Menu")
+              ul.dropdown-menu(aria-labelledby="user_dropdown_menu")
+                li
+                  a(href="/drafts") Drafts
+                li
+                  a(href="/trash") Trash
+                li
+                  a(href="/settings") Settings
+                li
+                  a(href="/logout") Logout
+        else
+          li
+            a#nav_login(href="/login") Login
+          li
+            a#nav_signup(href="/signup") Signup
 
 #back-to-top
   span.glyphicon.glyphicon-arrow-up(aria-hidden="true")

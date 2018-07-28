@@ -12,13 +12,9 @@ class AuthFilter : javax.servlet.Filter {
 
   override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
     if (request is HttpServletRequest && response is HttpServletResponse) {
-      Auth.currentAuthPack.set(Auth.AuthPack(request, response))
+      request.setAttribute("authPack", Auth.AuthPack(request, response))
     }
-    try {
-      chain.doFilter(request, response)
-    } finally {
-      Auth.currentAuthPack.remove()
-    }
+    chain.doFilter(request, response)
   }
 
   override fun init(filterConfig: FilterConfig) {}

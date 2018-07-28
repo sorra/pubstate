@@ -2,6 +2,8 @@ package com.pubstate.web.auth
 
 import com.pubstate.entity.LoginPass
 import org.slf4j.LoggerFactory
+import org.springframework.web.context.request.RequestAttributes
+import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.util.UriUtils
 import java.io.UnsupportedEncodingException
 import java.sql.Timestamp
@@ -17,8 +19,8 @@ object Auth {
   class AuthPack(val request: HttpServletRequest, val response: HttpServletResponse, var uid: Long? = null)
 
   // Always set by servlet filter
-  internal val currentAuthPack = ThreadLocal<AuthPack?>()
-  private fun current(): AuthPack = currentAuthPack.get()!!
+  private fun current(): AuthPack = RequestContextHolder.currentRequestAttributes()
+      .getAttribute("authPack", RequestAttributes.SCOPE_REQUEST) as AuthPack
 
   fun checkUid(): Long = uid() ?: throw RequireLoginException()
 
