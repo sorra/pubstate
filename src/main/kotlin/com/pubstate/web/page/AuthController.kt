@@ -8,6 +8,7 @@ import com.pubstate.web.base.BaseController
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
+import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,8 +18,14 @@ import javax.servlet.http.HttpServletRequest
 
 @Controller
 class AuthController : BaseController() {
+
   @GetMapping("/login")
-  fun loginPage() = "login"
+  fun loginPage(@RequestParam(required = false) goto: String?, modelMap: ModelMap): String {
+    if (goto != null) {
+      modelMap.addAttribute("goto", goto)
+    }
+    return "login"
+  }
 
   @GetMapping("/signup")
   fun signupPage() = "signup"

@@ -10,6 +10,8 @@ block customHeader
     }
 
 block mainContent
+  if goto
+    #message_box.alert.alert-danger Login is required.
   form.auth_form(action="/login", method="post")
     h3.heading Login
     .input-group
