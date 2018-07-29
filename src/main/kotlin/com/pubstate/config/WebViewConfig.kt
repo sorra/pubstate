@@ -82,7 +82,9 @@ class WebViewConfig {
     fun jsFiles(): List<String> = fileEntries(jsPath, jsRoot, ".js")
 
     private fun fileEntries(rootPath: String, root: File, suffix: String): List<String> {
-      return root.resolve("entries.list").readLines().map {
+      return root.resolve("entries.list").readLines().filter {
+        it.isNotBlank()
+      }.map {
         rootPath + it + suffix
       }
     }
