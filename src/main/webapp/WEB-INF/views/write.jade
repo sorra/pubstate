@@ -34,7 +34,7 @@ html
   body
     include navbar.jade
     #container.container
-      - var action = '/articles' + ((article && article.id > 0) ? article.id + '/edit' : 'new')
+      - var action = '/articles' + ((article && article.id > 0) ? article.id + '/edit' : '/new')
       form#article(action=action, method='post')
         #header-wrapper
           if !format
