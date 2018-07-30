@@ -1,16 +1,12 @@
-doctype html
-html
-  include common.jade
-  head
-    +header
-    title= article.title
-  body
-    include navbar.jade
-    #container.container
-      #article
-        h1= article.title
-        div
-          +userLabel(article.author)
-          +humanTimeLabel(article.whenCreated)
-        div=! article.outputContent
-    +footer
+extends layout.jade
+
+block customHeader
+  title= article.title
+
+block mainContent
+  #article
+    h1= article.title
+    div
+      +userLabel(article.author)
+      +humanTimeLabel(article.whenCreated)
+    div=! article.outputContent

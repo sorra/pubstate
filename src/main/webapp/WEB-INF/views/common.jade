@@ -33,7 +33,7 @@ mixin userLabel(u)
     a.user-name(href="/users/#{u.id}")= u.name
 
 mixin humanTimeLabel(dt)
-  span.human-time(data-time=dt.time)= humanTime(dt)
+  span.human-time(data-time=dt.time)= HumanTime.render(dt)
 
 mixin showCount(count)
   if count > 0
