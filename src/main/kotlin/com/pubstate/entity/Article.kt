@@ -5,11 +5,16 @@ import javax.persistence.*
 
 @Entity
 class Article(var title: String,
-              @Column(columnDefinition = "TEXT") @Basic(fetch = FetchType.LAZY)
+
+              @Basic(fetch = FetchType.LAZY)
+              @Column(columnDefinition = TEXT_COLUMN_DEF)
               var inputContent: String,
-              @Column(columnDefinition = "TEXT")
+
+              @Column(columnDefinition = TEXT_COLUMN_DEF)
               var outputContent: String,
+
               var formatType: FormatType,
+
               @ManyToOne(optional = false)
               var author: User
 ) : AutoModel() {

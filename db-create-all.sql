@@ -1,8 +1,8 @@
 create table article (
   id                            bigint auto_increment not null,
   title                         varchar(255),
-  input_content                 TEXT,
-  output_content                TEXT,
+  input_content                 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  output_content                TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   format_type                   integer,
   author_id                     bigint not null,
   version                       bigint not null,
@@ -15,7 +15,7 @@ create table article (
 
 create table comment (
   id                            bigint auto_increment not null,
-  content                       TEXT,
+  content                       TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   author_id                     bigint not null,
   target_type                   integer,
   target_id                     bigint,

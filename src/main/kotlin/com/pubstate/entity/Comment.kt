@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne
 
 @Entity
 class Comment(
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = TEXT_COLUMN_DEF)
     val content: String,
     @ManyToOne(optional = false)
     var author: User,
