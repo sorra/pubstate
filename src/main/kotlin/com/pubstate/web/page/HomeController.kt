@@ -1,13 +1,17 @@
 package com.pubstate.web.page
 
+import com.pubstate.service.admin.AdminService
+import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.servlet.ModelAndView
 
 @Controller
-class HomeController {
+class HomeController : BaseController() {
   @GetMapping("/")
-  fun index(): ModelAndView {
-    return ModelAndView("index")
+  fun index(): String {
+    if (!AdminService.inited()) {
+      return "redirect:/admin/init"
+    }
+    return "index"
   }
 }

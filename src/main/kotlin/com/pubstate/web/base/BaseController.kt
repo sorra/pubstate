@@ -40,7 +40,10 @@ abstract class BaseController : HasServices() {
   fun pageSize() = param("pageSize")?.toInt() ?: 20
 
   fun pagedModelAndView(listName: String, list: List<*>, pagesCount: Int, pageNum: Int): ModelAndView =
-      ModelAndView(listName)
+      pagedModelAndView(listName, listName, list, pagesCount, pageNum)
+
+  fun pagedModelAndView(viewName: String, listName: String, list: List<*>, pagesCount: Int, pageNum: Int): ModelAndView =
+      ModelAndView(viewName)
           .addObject(listName, list)
           .addObject("paginationLinks", RenderUtil.paginationLinks("/$listName", pagesCount, pageNum))
 }
