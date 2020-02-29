@@ -1,4 +1,4 @@
-package com.pubstate.web.util
+package com.pubstate.web
 
 object Constants {
   const val PAGE_CONTROLLER_PACKAGE = "com.pubstate.web.page"

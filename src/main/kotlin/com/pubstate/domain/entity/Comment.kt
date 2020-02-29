@@ -1,8 +1,9 @@
-package com.pubstate.entity
+package com.pubstate.domain.entity
 
-import com.avaje.ebean.PagedList
-import com.avaje.ebean.annotation.SoftDelete
-import com.pubstate.dto.CommentInfo
+import com.pubstate.vo.CommentInfo
+import com.pubstate.domain.entity.query.QComment
+import io.ebean.PagedList
+import io.ebean.annotation.SoftDelete
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.ManyToOne
@@ -11,9 +12,12 @@ import javax.persistence.ManyToOne
 class Comment(
     @Column(columnDefinition = TEXT_COLUMN_DEF)
     val content: String,
+
     @ManyToOne(optional = false)
     var author: User,
+
     val targetType: PubType,
+
     val targetId: Long
 ) : AutoModel() {
 
@@ -23,10 +27,13 @@ class Comment(
   fun toInfo() = CommentInfo(
       id, whenCreated.orDefault(), content, author.toBrief(), targetType, targetId)
 
-  companion object : BaseFind<Long, Comment>() {
+  companion object : BaseFinder<Long, Comment>(Comment::class.java) {
+
     fun commentsOf(targetType: PubType, targetId: Long,
                    pageNum: Int, pageSize: Int): PagedList<Comment> =
-        where().eq("targetType", targetType.ordinal).eq("targetId", targetId)
-            .findPageDesc(pageNum, pageSize)
+        QComment()
+            .targetType.eq(targetType)
+            .targetId.eq(targetId)
+            .query().findPageDesc(pageNum, pageSize)
   }
 }

@@ -1,6 +1,6 @@
 package com.pubstate.web.page.admin
 
-import com.pubstate.service.admin.AdminService
+import com.pubstate.domain.service.admin.AdminService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap

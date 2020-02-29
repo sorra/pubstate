@@ -1,12 +1,12 @@
 package com.pubstate.web.auth
 
-import com.pubstate.entity.LoginPass
+import com.pubstate.domain.entity.LoginPass
 import org.slf4j.LoggerFactory
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.util.UriUtils
 import java.io.UnsupportedEncodingException
-import java.sql.Timestamp
+import java.time.Instant
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -33,7 +33,7 @@ object Auth {
     val token = current.request.cookies?.find { it.name == TOKEN_NAME }?.value ?: return null
     val loginPass = LoginPass.byId(token) ?: return null
 
-    return if (loginPass.whenToExpire.after(Timestamp(System.currentTimeMillis()))) {
+    return if (loginPass.whenToExpire.isAfter(Instant.now())) {
       current.uid = loginPass.userId
       current.uid
     } else {
@@ -51,7 +51,7 @@ object Auth {
     tempSession.invalidate()
 
     val activeSeconds = (if(rememberMe) 7 * 86400 else 86400)
-    val whenToExpire = Timestamp(System.currentTimeMillis() + activeSeconds * 1000)
+    val whenToExpire = Instant.now().plusSeconds(activeSeconds.toLong())
 
     // sessionId不会重复吧? 若重复就要changeSessionId()重新生成了
     LoginPass(sessionId, userId, whenToExpire).save()
@@ -69,7 +69,7 @@ object Auth {
 
     val cookie = current.request.cookies?.find { it.name == TOKEN_NAME } ?: return
     cookie.maxAge = 0 // 0 = delete
-    LoginPass.deleteById(cookie.value)
+//    LoginPass.deleteById(cookie.value)
 
     val uid = current.uid
     current.uid = null
@@ -82,12 +82,7 @@ object Auth {
   }
 
   fun encodeLink(link: String): String {
-    try {
-      return UriUtils.encodeQueryParam(link, "ISO-8859-1")
-    } catch (e: UnsupportedEncodingException) {
-      throw RuntimeException(e)
-    }
-
+    return UriUtils.encodeQueryParam(link, "ISO-8859-1")
   }
 
   fun decodeLink(link: String): String {

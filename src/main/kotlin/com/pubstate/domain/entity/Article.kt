@@ -1,6 +1,6 @@
-package com.pubstate.entity
+package com.pubstate.domain.entity
 
-import com.avaje.ebean.annotation.SoftDelete
+import io.ebean.annotation.SoftDelete
 import javax.persistence.*
 
 @Entity
@@ -22,5 +22,5 @@ class Article(var title: String,
   @SoftDelete
   var deleted: Boolean = false
 
-  companion object : BaseFind<Long, Article>()
+  companion object : BaseFinder<Long, Article>(Article::class.java)
 }

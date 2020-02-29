@@ -1,6 +1,6 @@
-package com.pubstate.service
+package com.pubstate.domain.service
 
-import com.pubstate.entity.User
+import com.pubstate.domain.entity.User
 import com.pubstate.exception.DomainException
 import org.jasypt.util.password.StrongPasswordEncryptor
 import org.springframework.stereotype.Service
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserAuthService {
 
-  fun login(email: String, password: String): User {
+  fun checkLogin(email: String, password: String): User {
     val user = User.byEmail(email)
         ?: throw DomainException("Login failed: no matching user for email: %s", email)
 
@@ -23,6 +23,7 @@ class UserAuthService {
     if (User.byEmail(user.email) != null) {
       throw DomainException("Signup failed: email %s is already used", user.email)
     }
+
     user.password = encryptPassword(user.password)
     user.save()
     if(user.name.isEmpty()) user.name = "u" + user.id

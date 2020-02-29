@@ -1,4 +1,4 @@
-package com.pubstate.permission
+package com.pubstate.domain.permission
 
 import com.pubstate.exception.PermissionDeniedException
 

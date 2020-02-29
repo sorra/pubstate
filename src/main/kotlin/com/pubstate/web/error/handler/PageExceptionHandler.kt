@@ -2,7 +2,7 @@ package com.pubstate.web.error.handler
 
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.auth.RequireLoginException
-import com.pubstate.web.util.Constants
+import com.pubstate.web.Constants
 import org.springframework.core.annotation.Order
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

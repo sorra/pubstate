@@ -1,9 +1,9 @@
-package com.pubstate.service.admin
+package com.pubstate.domain.service.admin
 
-import com.avaje.ebean.Ebean
-import com.pubstate.entity.User
+import com.pubstate.domain.entity.User
 import com.pubstate.exception.DomainException
-import com.pubstate.service.HasServices
+import com.pubstate.domain.service.HasServices
+import io.ebean.Ebean
 import org.springframework.stereotype.Service
 import java.util.concurrent.locks.ReentrantLock
 
@@ -34,6 +34,6 @@ class AdminService : HasServices() {
   companion object {
     private val lock = ReentrantLock()
 
-    fun inited() = User.byId(1L) != null
+    fun inited() = true // User.byId(1L) != null
   }
 }

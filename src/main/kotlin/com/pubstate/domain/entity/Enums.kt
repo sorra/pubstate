@@ -1,4 +1,4 @@
-package com.pubstate.entity
+package com.pubstate.domain.entity
 
 
 enum class PubType {

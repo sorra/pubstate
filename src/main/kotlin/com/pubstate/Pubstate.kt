@@ -3,7 +3,6 @@ package com.pubstate
 import com.pubstate.web.base.PageDefaultModelInterceptor
 import com.pubstate.web.filter.AccessLoggingFilter
 import com.pubstate.web.filter.AuthFilter
-import org.avaje.agentloader.AgentLoader
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.web.server.ErrorPage
@@ -52,10 +51,6 @@ class PubState : WebMvcConfigurer {
 }
 
 fun main(args: Array<String>) {
-  if (!AgentLoader.loadAgentFromClasspath("avaje-ebeanorm-agent", "debug=1;packages=com.pubstate.entity.**")) {
-    System.err.println("avaje-ebeanorm-agent not found in classpath - not dynamically loaded")
-  }
-
   SpringApplication.run(PubState::class.java, *args)
 
   // Show a success message in console, because production logs are not printed in console

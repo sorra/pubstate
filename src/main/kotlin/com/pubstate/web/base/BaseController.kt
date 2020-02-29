@@ -1,7 +1,6 @@
 package com.pubstate.web.base
 
-import com.pubstate.service.HasServices
-import com.pubstate.web.util.RenderUtil
+import com.pubstate.domain.service.HasServices
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.web.bind.MissingServletRequestParameterException
@@ -45,5 +44,22 @@ abstract class BaseController : HasServices() {
   fun pagedModelAndView(viewName: String, listName: String, list: List<*>, pagesCount: Int, pageNum: Int): ModelAndView =
       ModelAndView(viewName)
           .addObject(listName, list)
-          .addObject("paginationLinks", RenderUtil.paginationLinks("/$listName", pagesCount, pageNum))
+          .addObject("paginationLinks", paginationLinks("/$listName", pagesCount, pageNum))
+
+  private fun paginationLinks(uri: String, pagesCount: Int, curpageNum: Int): String {
+    val sb = StringBuilder()
+    if (curpageNum > 1) {
+      sb.append("<a href=\"${uri}?pageNum=${curpageNum -1}\">Previous Page</a>")
+    }
+    for (i in 1..pagesCount) {
+      val attrs =
+          if (i == curpageNum) "class=\"page-link current-page-link\""
+          else "class=\"page-link\" href=\"${uri}?pageNum=${i}\""
+      sb.append('\n').append("<a ${attrs}>${i}</a>")
+    }
+    if (curpageNum < pagesCount) {
+      sb.append("\n<a href=\"${uri}?pageNum=${curpageNum +1}\">Next Page</a>")
+    }
+    return sb.toString()
+  }
 }

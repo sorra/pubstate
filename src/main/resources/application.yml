@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+  mvc:
+    favicon:
+      enabled: false
+
+server:
+  port: ${port:8080}
+  session-timeout: 5
+  tomcat:
+    max-threads: 60
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  error:
+    whitelabel:
+      enabled: false
+
+datasource:
+  db:
+    databaseUrl: jdbc:mysql://localhost:3306/pubstate?zeroDateTimeBehavior=round
+    databaseDriver: com.mysql.jdbc.Driver
+
+ebean:
+  db:
+    ddl:
+      generate: true
+      run: false

@@ -1,9 +1,10 @@
-package com.pubstate.entity
+package com.pubstate.domain.entity
 
-import com.avaje.ebean.Model
-import com.avaje.ebean.annotation.WhenCreated
-import com.avaje.ebean.annotation.WhenModified
+import io.ebean.Model
+import io.ebean.annotation.WhenCreated
+import io.ebean.annotation.WhenModified
 import java.sql.Timestamp
+import java.time.Instant
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -17,7 +18,7 @@ class LoginPass(
     @Column(nullable = false)
     var userId: Long,
 
-    var whenToExpire: Timestamp
+    var whenToExpire: Instant
 ) : Model() {
   @Version
   var version: Long = 0
@@ -28,5 +29,5 @@ class LoginPass(
   @WhenModified
   var whenModified: Timestamp? = null
 
-  companion object : Find<String, LoginPass>()
+  companion object : BaseFinder<String, LoginPass>(LoginPass::class.java)
 }

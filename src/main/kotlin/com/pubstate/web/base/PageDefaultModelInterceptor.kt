@@ -1,7 +1,6 @@
 package com.pubstate.web.base
 
-import com.pubstate.dto.UserSelf
-import com.pubstate.entity.User
+import com.pubstate.vo.UserSelf
 import com.pubstate.web.auth.Auth
 import org.slf4j.LoggerFactory
 import org.springframework.web.servlet.ModelAndView
@@ -18,7 +17,10 @@ class PageDefaultModelInterceptor : HandlerInterceptorAdapter() {
     }
   }
 
-  private fun userSelf(): UserSelf? = Auth.uid()?.let { silently { User.byId(it)?.toSelf() } }
+  private fun userSelf(): UserSelf? = Auth.uid()?.let { silently {
+//    User.byId(it)?.toSelf()
+    null
+  } }
 
   private val log = LoggerFactory.getLogger(javaClass)
 

@@ -1,7 +1,7 @@
 package com.pubstate.web.page
 
-import com.pubstate.entity.Article
-import com.pubstate.entity.FormatType
+import com.pubstate.domain.entity.Article
+import com.pubstate.domain.entity.FormatType
 import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -70,7 +70,7 @@ class ArticleController : BaseController() {
     val pageNum = pageNum()
     val pageSize = pageSize()
 
-    val (articles, totalPageCount) = Article.findPageDescWithTotalPageCount(pageNum, pageSize)
+    val (articles, totalPageCount) = Article.findPageDescWithTotalPagesCount(pageNum, pageSize)
 
     return pagedModelAndView("articles", articles, totalPageCount, pageNum)
   }

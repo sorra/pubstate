@@ -1,15 +1,16 @@
-package com.pubstate.service
+package com.pubstate.domain.service
 
-import com.pubstate.entity.Article
-import com.pubstate.entity.FormatType
-import com.pubstate.entity.User
-import com.pubstate.permission.ArticlePermission
+import com.pubstate.domain.entity.Article
+import com.pubstate.domain.entity.FormatType
+import com.pubstate.domain.entity.User
+import com.pubstate.domain.permission.ArticlePermission
 import com.pubstate.util.JsoupUtil
 import com.pubstate.util.MarkdownUtil
 import org.springframework.stereotype.Service
 
 @Service
 class ArticleService {
+
   fun create(uid: Long, title: String, content: String, formatType: FormatType): Article {
     return Article(title, content, render(content, formatType), formatType, User.ref(uid)).apply {
       save()
@@ -17,7 +18,7 @@ class ArticleService {
   }
 
   fun update(uid: Long, id: Long, title: String, content: String, formatType: FormatType): Article {
-    val article = Article.mustGet(id)
+    val article = mustGet(id)
 
     ArticlePermission(uid, article).canEdit()
 
@@ -31,7 +32,7 @@ class ArticleService {
   }
 
   fun delete(uid: Long, id: Long) {
-    val article = Article.mustGet(id)
+    val article = mustGet(id)
 
     ArticlePermission(uid, article).canDelete()
 

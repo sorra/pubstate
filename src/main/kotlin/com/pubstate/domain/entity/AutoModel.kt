@@ -1,9 +1,9 @@
-package com.pubstate.entity
+package com.pubstate.domain.entity
 
-import com.avaje.ebean.Model
-import com.avaje.ebean.annotation.WhenCreated
-import com.avaje.ebean.annotation.WhenModified
 import com.pubstate.util.IdCommons
+import io.ebean.Model
+import io.ebean.annotation.WhenCreated
+import io.ebean.annotation.WhenModified
 import java.sql.Timestamp
 import javax.persistence.GeneratedValue
 import javax.persistence.Id

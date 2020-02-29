@@ -1,6 +1,6 @@
-package com.pubstate.permission
+package com.pubstate.domain.permission
 
-import com.pubstate.entity.Article
+import com.pubstate.domain.entity.Article
 
 
 class ArticlePermission(

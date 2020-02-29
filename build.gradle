@@ -1,6 +1,3 @@
-group 'com.pubstate'
-version '1.0-SNAPSHOT'
-
 buildscript {
   ext {
     springBootVersion = '2.2.5.RELEASE'
@@ -8,24 +5,23 @@ buildscript {
     ebeanVersion = '12.1.8'
   }
   repositories {
-    mavenCentral()
     gradlePluginPortal()
-  }
-  dependencies {
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
-    classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}"
-    classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
-    classpath "io.ebean:ebean-gradle-plugin:${ebeanVersion}"
   }
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'kotlin'
-apply plugin: "kotlin-allopen"
-apply plugin: "kotlin-spring"
-apply plugin: "kotlin-noarg"
+plugins {
+  id 'java'
+  id 'org.springframework.boot' version "${springBootVersion}"
+  id 'org.jetbrains.kotlin.jvm' version "${kotlinVersion}"
+  id 'org.jetbrains.kotlin.kapt' version "${kotlinVersion}"
+  id 'org.jetbrains.kotlin.plugin.spring' version "${kotlinVersion}"
+  id 'org.jetbrains.kotlin.plugin.allopen' version "${kotlinVersion}"
+  id 'org.jetbrains.kotlin.plugin.noarg' version "${kotlinVersion}"
+  id 'io.ebean' version "${ebeanVersion}"
+}
+
+group 'com.pubstate'
+version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 compileJava.options.compilerArgs += '-parameters'
@@ -45,7 +41,8 @@ repositories {
 }
 
 ext {
-  cmarkVersion = '0.9.0'
+  cmarkVersion = '0.13.1'
+  jade4jVersion = '1.3.1'
 }
 
 dependencies {
@@ -55,28 +52,24 @@ dependencies {
   compile "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
   compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
-  runtime 'mysql:mysql-connector-java:5.1.38'
+  compile "io.ebean:ebean:${ebeanVersion}"
+  compile "io.ebean:ebean-querybean:${ebeanVersion}"
+  kapt "io.ebean:kotlin-querybean-generator:${ebeanVersion}"
 
-  compile('org.avaje.ebeanorm:avaje-ebeanorm:7.9.1') {
-    exclude group: 'org.slf4j', module: 'slf4j-api'
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
-  }
-  compile 'org.avaje.ebeanorm:avaje-ebeanorm-agent:4.9.2'
-  compile 'org.avaje:avaje-agentloader:2.1.2'
-
+  compile 'org.yaml:snakeyaml:1.25'
   compile 'org.apache.commons:commons-lang3:3.5'
   compile 'commons-fileupload:commons-fileupload:1.3.1'
-
-  compile 'de.neuland-bfi:jade4j:1.2.7'
-  compile 'de.neuland-bfi:spring-jade4j:1.2.7'
-
-  compile 'org.jasypt:jasypt:1.9.2'
-  compile 'org.jsoup:jsoup:1.10.2'
+  compile "de.neuland-bfi:jade4j:${jade4jVersion}"
+  compile "de.neuland-bfi:spring-jade4j:${jade4jVersion}"
+  compile 'org.jasypt:jasypt:1.9.3'
+  compile 'org.jsoup:jsoup:1.11.3'
   compile "com.atlassian.commonmark:commonmark:${cmarkVersion}"
   compile "com.atlassian.commonmark:commonmark-ext-autolink:${cmarkVersion}"
   compile "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:${cmarkVersion}"
   compile "com.atlassian.commonmark:commonmark-ext-gfm-tables:${cmarkVersion}"
   compile "com.atlassian.commonmark:commonmark-ext-heading-anchor:${cmarkVersion}"
+
+  runtime 'mysql:mysql-connector-java:5.1.38'
 
   testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }

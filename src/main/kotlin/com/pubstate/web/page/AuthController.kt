@@ -1,6 +1,6 @@
 package com.pubstate.web.page
 
-import com.pubstate.entity.User
+import com.pubstate.domain.entity.User
 import com.pubstate.exception.BadArgumentException
 import com.pubstate.exception.DomainException
 import com.pubstate.web.auth.Auth
@@ -41,7 +41,7 @@ class AuthController : BaseController() {
     logger.info("Trying login email: {}", email)
 
     Auth.logout()
-    val user = userAuthService.login(email, password)
+    val user = userAuthService.checkLogin(email, password)
     Auth.login(user.id, rememberMe)
 
     val referer = request.getHeader("referer")

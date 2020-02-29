@@ -1,6 +1,6 @@
 package com.pubstate.web.page
 
-import com.pubstate.service.admin.AdminService
+import com.pubstate.domain.service.admin.AdminService
 import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
