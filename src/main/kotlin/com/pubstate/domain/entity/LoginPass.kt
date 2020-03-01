@@ -18,6 +18,7 @@ class LoginPass(
     @Column(nullable = false)
     var userId: Long,
 
+    @Column(nullable = false)
     var whenToExpire: Instant
 ) : Model() {
   @Version
