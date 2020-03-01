@@ -1,6 +1,6 @@
 package com.pubstate.web.page
 
-import com.pubstate.domain.service.admin.AdminService
+import com.pubstate.domain.service.ManageService
 import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping
 class HomeController : BaseController() {
   @GetMapping("/")
   fun index(): String {
-    if (!AdminService.inited()) {
-      return "redirect:/admin/init"
+    if (!ManageService.inited()) {
+      return "redirect:/manage/init"
     }
     return "index"
   }

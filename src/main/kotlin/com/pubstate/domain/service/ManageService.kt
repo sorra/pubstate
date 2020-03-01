@@ -1,14 +1,13 @@
-package com.pubstate.domain.service.admin
+package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.User
 import com.pubstate.exception.DomainException
-import com.pubstate.domain.service.HasServices
 import io.ebean.Ebean
 import org.springframework.stereotype.Service
 import java.util.concurrent.locks.ReentrantLock
 
 @Service
-class AdminService : HasServices() {
+class ManageService : HasServices() {
 
   fun init(email: String, password: String, name: String) {
     if (inited()) {
