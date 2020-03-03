@@ -1,16 +1,18 @@
 Recollect the joy of coding!
 
-PubState, a content management system built with Kotlin and ❤️.
+PubState, a blogging system built with ❤️
 
 Technology stack:
 * Frontend: HTML/CSS/JavaScript, jQuery, Bootstrap.
-* Backend: Kotlin, Spring Boot, Jade4j, Ebean ORM, MySQL.
+* Backend: MySQL, Java/Kotlin, Spring Boot, Jade4j, Ebean ORM.
 
 Development setup:
-* Install JDK 8+ and MySQL 5.5+
-* Login MySQL as "root" user, run scripts db-setup.sql and db-create-all.sql
+* Install JDK 8+ and MySQL 5.6+
+* Login MySQL as "root" user, run scripts db-setup.sql and db-create-all.sql together
 * Login MySQL as "pubstate" user, you are be able to see the "pubstate" database
-* Import as a Gradle project to your Java IDE (with Kotlin plugin installed, Intellij is preferred)
+* Import as a Gradle project to your Java IDE (with Kotlin plugin, Intellij is preferred)
 * In IDE, run the file Pubstate.kt
 
-Open http://localhost:8080/ from your web browser. It prompts you to create an admin account.
+In your browser, open http://localhost:8080/.
+It prompts you to create an admin account.
+Go ahead and enjoy it!
