@@ -1,7 +1,7 @@
 package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.Article
-import com.pubstate.domain.entity.FormatType
+import com.pubstate.domain.enum.FormatType
 import com.pubstate.domain.entity.User
 import com.pubstate.domain.permission.ArticlePermission
 import com.pubstate.util.HtmlUtil

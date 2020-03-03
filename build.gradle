@@ -53,8 +53,6 @@ dependencies {
   compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
   compile "io.ebean:ebean:${ebeanVersion}"
-  compile "io.ebean:ebean-querybean:${ebeanVersion}"
-  kapt "io.ebean:kotlin-querybean-generator:${ebeanVersion}"
 
   compile 'org.yaml:snakeyaml:1.25'
   compile 'org.apache.commons:commons-lang3:3.5'

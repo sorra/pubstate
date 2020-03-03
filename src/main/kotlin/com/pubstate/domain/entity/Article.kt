@@ -1,5 +1,6 @@
 package com.pubstate.domain.entity
 
+import com.pubstate.domain.enum.FormatType
 import io.ebean.annotation.SoftDelete
 import javax.persistence.*
 

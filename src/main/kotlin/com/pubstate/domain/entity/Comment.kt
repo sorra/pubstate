@@ -1,7 +1,7 @@
 package com.pubstate.domain.entity
 
 import com.pubstate.vo.CommentInfo
-import com.pubstate.domain.entity.query.QComment
+import com.pubstate.domain.enum.PubType
 import io.ebean.PagedList
 import io.ebean.annotation.SoftDelete
 import javax.persistence.Column
@@ -30,10 +30,11 @@ class Comment(
   companion object : BaseFinder<Long, Comment>(Comment::class.java) {
 
     fun commentsOf(targetType: PubType, targetId: Long,
-                   pageNum: Int, pageSize: Int): PagedList<Comment> =
-        QComment()
-            .targetType.eq(targetType)
-            .targetId.eq(targetId)
-            .query().findPageDesc(pageNum, pageSize)
+                   pageNum: Int, pageSize: Int): PagedList<Comment> {
+      return query().where()
+          .eq("targetType", targetType)
+          .eq("targetId", targetId)
+          .query().findPageDesc(pageNum, pageSize)
+    }
   }
 }

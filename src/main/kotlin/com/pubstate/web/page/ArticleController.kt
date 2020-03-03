@@ -1,7 +1,7 @@
 package com.pubstate.web.page
 
 import com.pubstate.domain.entity.Article
-import com.pubstate.domain.entity.FormatType
+import com.pubstate.domain.enum.FormatType
 import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*

@@ -1,6 +1,6 @@
 package com.pubstate.web.ajax
 
-import com.pubstate.domain.entity.PubType
+import com.pubstate.domain.enum.PubType
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.base.BaseController
 import org.springframework.web.bind.annotation.*

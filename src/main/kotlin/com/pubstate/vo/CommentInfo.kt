@@ -1,7 +1,7 @@
 package com.pubstate.vo
 
 import com.pubstate.annotation.KotlinNoArg
-import com.pubstate.domain.entity.PubType
+import com.pubstate.domain.enum.PubType
 import java.util.*
 
 @KotlinNoArg

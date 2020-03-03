@@ -1,6 +1,5 @@
 package com.pubstate.domain.entity
 
-import com.pubstate.domain.entity.query.QUser
 import com.pubstate.vo.UserBrief
 import com.pubstate.vo.UserSelf
 import io.ebean.annotation.SoftDelete
@@ -24,9 +23,10 @@ class User(
 
   companion object : BaseFinder<Long, User>(User::class.java) {
 
-    fun byEmail(email: String): User? =
-        QUser()
-            .email.eq(email)
-            .findOne()
+    fun byEmail(email: String): User? {
+      return query().where()
+          .eq("email", email)
+          .findOne()
+    }
   }
 }

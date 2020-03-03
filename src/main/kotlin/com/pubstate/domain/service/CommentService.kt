@@ -1,8 +1,8 @@
 package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.Comment
-import com.pubstate.domain.entity.PubType
 import com.pubstate.domain.entity.User
+import com.pubstate.domain.enum.PubType
 import io.ebean.Ebean
 import org.springframework.stereotype.Service
 
