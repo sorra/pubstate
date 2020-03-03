@@ -1,4 +1,4 @@
-#navbar{
+#topnav{
   font-size: 15px;
   background-size: 44px 44px;
   padding: 0 20px 0 20px;
@@ -15,7 +15,7 @@
   border-radius: 0;
 }
 
-#navbar-content{
+#topnav-content{
   max-width: 1200px;
   margin: 0 auto 0 auto;
 }
