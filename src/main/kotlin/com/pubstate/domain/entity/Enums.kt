@@ -6,5 +6,5 @@ enum class PubType {
 }
 
 enum class FormatType {
-  NONE, MARKDOWN, RICHTEXT
+  NONE, MARKDOWN, HTML
 }

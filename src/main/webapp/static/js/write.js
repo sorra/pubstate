@@ -13,9 +13,9 @@ function write_setup () {
 }
 
 function write_createEditor() {
-  if ($('#contentType').val() == 'markdown') {
+  if ($('#format').val() == 'MARKDOWN') {
     return write_createMarkdownEditor()
-  } else {
+  } else { // HTML
     return write_createRichtextEditor()
   }
 }
@@ -23,7 +23,7 @@ function write_createEditor() {
 function write_createMarkdownEditor() {
   return {
     simplemde: new SimpleMDE({
-      element: $('#content')[0],
+      element: $('#content-edit')[0],
       autoDownloadFontAwesome: false,
       spellChecker: false
     }),
@@ -35,7 +35,7 @@ function write_createMarkdownEditor() {
 
 function write_createRichtextEditor() {
   tinymce.init({
-    selector: '#content',
+    selector: '#content-edit',
     language: 'zh_CN'
   })
   return {
@@ -55,15 +55,15 @@ function write_formSubmit() {
     })
 
     var $submit = $form.find('.btn-submit')
-    var $title = $('#title')
-    if ($title.val().length == 0) {
-      $title.fadeOut().fadeIn()
+    var $titleEdit = $('#title-edit')
+    if ($titleEdit.val().length == 0) {
+      $titleEdit.fadeOut().fadeIn()
       popAlert('请填写标题')
       return false
     }
 
     var contentValue = window.contentEditor.getContent()
-    $('#content').val(contentValue)
+    $('#content-edit').val(contentValue)
     if (contentValue.length == 0) {
       $('#editor-wrapper').fadeOut().fadeIn()
       popAlert('请填写内容')
@@ -103,26 +103,41 @@ function write_setupSwitchEditor() {
   })
 }
 
+function write_getData() {
+  return {
+    format: $('#format').val(),
+    title: $('#title-edit').val(),
+    content: window.contentEditor.getContent()
+  }
+}
+
 function write_setupSaveDraft() {
-  var savedTitle = $('#title').val()
-  var savedContent = $('#content').val()
+  // treat unchanged data as initial draft
+  var savedDraft = write_getData()
 
   function saveDraft() {
-    var title = $('#title').val()
-    var format = $('#format').val()
-    var content = window.contentEditor.getContent()
-    if (title === savedTitle && content === savedContent) {
+    var liveData = write_getData()
+    if (liveData == savedDraft) {
       setTimeout(saveDraft, 3000)
       return
     }
-    var params = {draftId: draftId, targetId: articleId, title: title, format: format, content: content}
+
+    var params = {
+      draftId: draftId,
+      targetId: articleId,
+      format: liveData.format,
+      title: liveData.title,
+      content: liveData.content
+    }
+
+    //TODO limit concurrency to a single queue
     $.post("/drafts/save", params).done(function (resp) {
-      var savedDraftId = parseInt(resp)
-      if (savedDraftId) {
-        draftId = savedDraftId
+      var respDraftId = parseInt(resp)
+      if (respDraftId) {
+        draftId = respDraftId
       }
-      savedTitle = title
-      savedContent = content
+      savedDraft = liveData
+
       popAlert('Draft is saved', 'info', 1000)
     }).fail(function (resp) {
       popAlert('Draft can\'t be saved: ' + errorMsg(resp))

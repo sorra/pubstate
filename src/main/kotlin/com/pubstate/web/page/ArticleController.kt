@@ -33,7 +33,8 @@ class ArticleController : BaseController() {
   }
 
   @GetMapping("/{id}/edit")
-  fun pageForEdit(@PathVariable id: Long, @RequestParam(defaultValue = MARKDOWN) format: String): ModelAndView {
+  fun pageForEdit(@PathVariable id: Long,
+                  @RequestParam(defaultValue = MARKDOWN) format: String): ModelAndView {
     Auth.checkUid()
 
     val article = articleService.mustGet(id)
@@ -78,6 +79,6 @@ class ArticleController : BaseController() {
   private fun String.toEnum(): FormatType = FormatType.valueOf(toUpperCase())
 
   companion object {
-    const val MARKDOWN = "markdown"
+    const val MARKDOWN = "MARKDOWN"
   }
 }

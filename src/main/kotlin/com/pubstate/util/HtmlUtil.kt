@@ -9,7 +9,7 @@ import org.jsoup.safety.Whitelist
 import org.jsoup.select.NodeTraversor
 import org.jsoup.select.NodeVisitor
 
-object JsoupUtil {
+object HtmlUtil {
   // Though adding "#" and "/" has no effect
   private val whitelist: Whitelist = Whitelist.relaxed().addProtocols("a", "href", "#", "/")
   // Allow style attribute for rich-text editor
@@ -23,7 +23,7 @@ object JsoupUtil {
     }
   }
 
-  fun clean(html: String): String {
+  fun secureClean(html: String): String {
     val dirty = Jsoup.parseBodyFragment(html, "")
     val cleaner = Cleaner(whitelist)
     val clean = cleaner.clean(dirty)
@@ -33,7 +33,7 @@ object JsoupUtil {
     return clean.body().html()
   }
 
-  fun secureLinks(document: Document) {
+  private fun secureLinks(document: Document) {
     NodeTraversor(object : NodeVisitor {
       override fun head(node: Node, depth: Int) {
         if (node is Element && node.tagName() == "a") {

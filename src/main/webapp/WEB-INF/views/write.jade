@@ -15,7 +15,7 @@ html
         width: 90%;
         margin: 20px auto;
       }
-      #title {
+      #title-edit {
         width: 67%;
         margin-left: 100px;
         height: 2em;
@@ -25,7 +25,7 @@ html
         width: 90%;
         margin: 20px auto;
       }
-      #content {
+      #content-edit {
         min-height: 35em;
       }
       .editor-toolbar.fullscreen, .CodeMirror-fullscreen {
@@ -38,17 +38,17 @@ html
       form#article(action=action, method='post')
         #header-wrapper
           if !format
-            - var format = article ? article.format : 'markdown'
-          - var alterFormat = format == 'markdown' ? 'richtext' : 'markdown'
+            - var format = article ? article.format : 'MARKDOWN'
+          - var alterFormat = format == 'MARKDOWN' ? 'HTML' : 'MARKDOWN'
           a(href='#switch-editor-dialog', data-url='?format=#{alterFormat}', data-toggle='modal')
             | Switch to #{alterFormat}
           input#format(name='format', type='hidden', value=format)
-          input#title(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
+          input#title-edit(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
         #editor-wrapper
-          textarea#content(name='content', placeholder='Content here (No more than 20000 characters)')
+          textarea#content-edit(name='content', placeholder='Content here (No more than 20000 characters)')
             | !{article.inputContent}
         #submitter-wrapper
-          | $\!{include("tag-input.httl")}
+          // tag-input
         button.btn-submit.btn.btn-primary.pull-right(type='submit') Submit
     +footer
 

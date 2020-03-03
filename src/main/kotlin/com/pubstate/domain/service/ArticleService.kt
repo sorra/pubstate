@@ -4,7 +4,7 @@ import com.pubstate.domain.entity.Article
 import com.pubstate.domain.entity.FormatType
 import com.pubstate.domain.entity.User
 import com.pubstate.domain.permission.ArticlePermission
-import com.pubstate.util.JsoupUtil
+import com.pubstate.util.HtmlUtil
 import com.pubstate.util.MarkdownUtil
 import org.springframework.stereotype.Service
 
@@ -12,8 +12,14 @@ import org.springframework.stereotype.Service
 class ArticleService {
 
   fun create(uid: Long, title: String, content: String, formatType: FormatType): Article {
-    return Article(title, content, render(content, formatType), formatType, User.ref(uid)).apply {
-      save()
+    return Article(
+        title = title,
+        inputContent = content,
+        outputContent = render(content, formatType),
+        formatType = formatType,
+        author = User.ref(uid)
+    ).also {
+      it.save()
     }
   }
 
@@ -39,12 +45,13 @@ class ArticleService {
     article.delete()
   }
 
-  private fun render(inputContent: String, formatType: FormatType): String {
-    var outputContent = inputContent
+  private fun render(input: String, formatType: FormatType): String {
+    var output = input
     if (formatType == FormatType.MARKDOWN) {
-      outputContent = MarkdownUtil.render(inputContent)
+      output = MarkdownUtil.render(input)
     }
-    return JsoupUtil.clean(outputContent)
+    // process HTML anyway
+    return HtmlUtil.secureClean(output)
   }
 
   fun mustGet(id: Long): Article {
