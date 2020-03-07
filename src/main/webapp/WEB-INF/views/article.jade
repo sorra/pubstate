@@ -11,4 +11,4 @@ block mainContent
       +humanTimeLabel(article.whenCreated)
       if article.author.id == userSelf.id
         a(href="/articles/#{article.id}/edit") Edit
-    div=! article.outputContent
+    div!= article.outputContent

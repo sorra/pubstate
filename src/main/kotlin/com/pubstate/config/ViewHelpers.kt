@@ -48,7 +48,7 @@ object ViewHelpers {
         return "Just now"
       }
       if (minutes in 1..59) {
-        return "${minutes} min"
+        return "${minutes} min ago"
       }
       if (LocalDate.now().isEqual(thatDay)) { // In this day
         return DateTimeFormatter.ofPattern("HH:mm").withZone().format(thatTime)
