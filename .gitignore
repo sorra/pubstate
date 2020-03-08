@@ -5,3 +5,4 @@ logs/
 .DS_Store
 .idea/
 *.iml
+src/main/webapp/static/dist/

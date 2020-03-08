@@ -1,35 +1,44 @@
 mixin css(path)
-  link(href=Resource.get(path), rel="stylesheet", type="text/css")
+  link(href=path, rel="stylesheet", type="text/css")
 
 mixin js(path)
-  script(src=Resource.get(path))
+  script(src=path)
+
+mixin libCss(names)
+  for name in Resources.convertLibNames(names, '.css')
+    +css(cdn + "/static/lib/css/" + name)
+  
+mixin libJs(names)
+  for name in Resources.convertLibNames(names, '.js')
+    +js(cdn + "/static/lib/js/" + name)
+
+mixin distCss(names)
+  for name in Resources.convertDistNames(names, '.css')
+    +css(cdn + "/static/dist/" + name)
+
+mixin distJs(names)
+  for name in Resources.convertDistNames(names, '.js')
+    +js(cdn + "/static/dist/" + name)
 
 mixin header
   meta(charset="UTF-8")
   meta(name="viewport", content="width=device-width, initial-scale=1")
   meta(name="description" content="PubState")
-  link(href=Resource.get('/static/favicon.png') rel="icon" type="image/png")
-  if DevMode
-    for rs in DevMode.cssFiles()
-      +css(rs)
-  else
-    +css("/static/css/libs.min.css")
-    +css("/static/css/all.min.css")
+  link(href='/favicon.ico' rel="icon")
+  +libCss(['bootstrap', 'bootstrap-theme'])
+  +distCss(['main'])
 
 mixin footer
   footer
-    p Powered by PubState
-  if DevMode
-    for rs in DevMode.jsFiles()
-      +js(rs)
-  else
-    +js("/static/js/libs.min.js")
-    +js("/static/js/all.min.js")
+    p Powered by 
+      a(href="https://github.com/sorra/pubstate") PubState
+  +libJs(['jquery', 'bootstrap'])
+  +distJs(['runtime', 'main'])
 
 mixin userLabel(u)
   span.user-label(data-id=u.id)
     a.user-avatar(href="/users/#{u.id}")
-      img(src=Resource.get(u.avatar))
+      img(src="#{cdn}/static/avatars/#{u.avatar}")
     a.user-name(href="/users/#{u.id}")= u.name
 
 mixin humanTimeLabel(dt)
