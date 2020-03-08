@@ -1,9 +1,6 @@
 spring:
   profiles:
     active: dev
-  mvc:
-    favicon:
-      enabled: false
 
 server:
   port: ${port:8080}
