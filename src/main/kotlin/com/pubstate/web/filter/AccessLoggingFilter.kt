@@ -11,19 +11,22 @@ class AccessLoggingFilter : javax.servlet.Filter {
   private val logger = LoggerFactory.getLogger(javaClass)
 
   override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-    var msg: String? = null
-    if (request is HttpServletRequest) {
+    val name = if (request is HttpServletRequest) {
       val query = if(request.queryString != null) "?"+request.queryString else ""
-      msg = request.method + " " + request.requestURI + query
+      request.protocol + " " + request.method + " " + request.requestURI + query
+    } else {
+      request.protocol
     }
+
+    logger.info("Start request: {}", name)
 
     val timeStart = System.currentTimeMillis()
     try {
       chain.doFilter(request, response)
     } finally {
-      if (msg != null) {
+      if (name != null) {
         val timeCost = System.currentTimeMillis() - timeStart
-        logger.info("${timeCost}ms $msg")
+        logger.info("End request: {}ms {}", timeCost, name)
       }
     }
   }
