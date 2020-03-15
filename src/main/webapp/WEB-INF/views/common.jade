@@ -33,7 +33,7 @@ mixin footer
     p Powered by 
       a(href="https://github.com/sorra/pubstate") PubState
   +libJs(['jquery', 'bootstrap'])
-  +distJs(['runtime', 'main'])
+  +distJs(['runtime', 'vendors', 'main'])
 
 mixin userLabel(u)
   span.user-label(data-id=u.id)

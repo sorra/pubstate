@@ -25,9 +25,13 @@ object ViewHelpers {
 
   class Resources(private val isDevMode: Boolean) {
     fun convertLibNames(names: Array<String>, suffix: String): List<String> {
-      val libNameSuffix = if (isDevMode) "" else "-min"
       return names.map { name ->
-        name + libNameSuffix + suffix
+        val min = ".min"
+        if (isDevMode || name.endsWith(min)) {
+          name + suffix
+        } else {
+          name + min + suffix
+        }
       }
     }
 
@@ -68,26 +72,4 @@ object ViewHelpers {
     //TODO application property can override system time zone
     private fun DateTimeFormatter.withZone() = withZone(ZoneId.systemDefault())
   }
-
-//  class DevMode(servletContext: ServletContext) {
-//
-//    private val cssPath = "/static/css/"
-//    private val jsPath = "/static/js/"
-//
-//    private val cssRoot = File(servletContext.getRealPath(cssPath))
-//    private val jsRoot = File(servletContext.getRealPath(jsPath))
-//
-//    fun cssFiles(): List<String> = fileEntries(cssPath, cssRoot, ".css")
-//
-//    fun jsFiles(): List<String> = fileEntries(jsPath, jsRoot, ".js")
-//
-//    private fun fileEntries(rootPath: String, root: File, suffix: String): List<String> {
-//      return root.resolve("entries.list").readLines().filter {
-//        it.isNotBlank()
-//      }.map {
-//        rootPath + it + suffix
-//      }
-//    }
-//  }
-
 }

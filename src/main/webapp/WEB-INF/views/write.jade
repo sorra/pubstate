@@ -1,57 +1,53 @@
-doctype html
-html
-  //- article?, draftId?, format?
-  include common.jade
-  head
-    +header
-    title Write Article
-    +css('/static/css/simplemde.min.css')
-    style.
-      #article {
-        width: 100%;
-        margin: auto;
-      }
-      #header-wrapper {
-        width: 90%;
-        margin: 20px auto;
-      }
-      #title-edit {
-        width: 67%;
-        margin-left: 100px;
-        height: 2em;
-        padding: 0.5em;
-      }
-      #editor-wrapper {
-        width: 90%;
-        margin: 20px auto;
-      }
-      #content-edit {
-        min-height: 35em;
-      }
-      .editor-toolbar.fullscreen, .CodeMirror-fullscreen {
-        z-index: 1031;
-      }
-  body
-    include navbar.jade
-    #container.container
-      - var action = '/articles/' + ((article && article.id) ? article.id : '')
-      form#article(action=action, method='post')
-        #header-wrapper
-          if !format
-            - var format = article ? article.format : 'MARKDOWN'
-          - var alterFormat = format == 'MARKDOWN' ? 'HTML' : 'MARKDOWN'
-          a(href='#switch-editor-dialog', data-url='?format=#{alterFormat}', data-toggle='modal')
-            | Switch to #{alterFormat}
-          input#format(name='format', type='hidden', value=format)
-          input#title-edit(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
-        #editor-wrapper
-          textarea#content-edit(name='content', placeholder='Content here (No more than 20000 characters)')
-            | !{article.inputContent}
-        #submitter-wrapper
-          // tag-input
-        button.btn-submit.btn.btn-primary.pull-right(type='submit') Submit
-    +footer
+extends layout.jade
+//- article?, draftId?, format?
+block customHeader
+  title Write Article
+  +libCss(['simplemde.min'])
+  style.
+    #article {
+      width: 100%;
+      margin: auto;
+    }
+    #header-wrapper {
+      width: 90%;
+      margin: 20px auto;
+    }
+    #title-edit {
+      width: 67%;
+      margin-left: 100px;
+      height: 2em;
+      padding: 0.5em;
+    }
+    #editor-wrapper {
+      width: 90%;
+      margin: 20px auto;
+    }
+    #content-edit {
+      min-height: 35em;
+    }
+    .editor-toolbar.fullscreen, .CodeMirror-fullscreen {
+      z-index: 1031;
+    }
 
+block mainContent
+  - var action = '/articles/' + ((article && article.id) ? article.id : '')
+  form#article(action=action, method='post', data-id=article.id data-draft-id=draftId)
+    #header-wrapper
+      if !format
+        - var format = article ? article.format : 'MARKDOWN'
+      - var alterFormat = (format == 'MARKDOWN') ? 'HTML' : 'MARKDOWN'
+      a(href='#switch-editor-dialog', data-url='?format=#{alterFormat}', data-toggle='modal')
+        | Switch to #{alterFormat}
+      input#format(name='format', type='hidden', value=format)
+      input#title-edit(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
+    #editor-wrapper
+      textarea#content-edit(name='content', placeholder='Content here (No more than 20000 characters)')
+        | !{article.inputContent}
+    #submitter-wrapper
+      // tag-input
+    button.btn-submit.btn.btn-primary.pull-right(type='submit') Submit
+
+block customFooter
     #switch-editor-dialog.modal.fade(tabindex='-1', role='dialog')
       .modal-dialog
         .modal-content
@@ -62,9 +58,14 @@ html
             button.sure-btn.btn.btn-primary(type='button') Switch
             button.btn.btn-default(type='button', data-dismiss='modal') Cancel
 
-    +js('/static/js/simplemde.min.js')
-    +js('/static/js/tinymce/tinymce.min.js')
+    - var editorLibName = (format == 'MARKDOWN') ? 'simplemde.min' : 'tinymce/tinymce.min'
+    +libJs([editorLibName])
+    +distJs(['write'])
     script.
-      var draftId = #{draftId ? draftId : 'null'}
-      var articleId = #{article.id ? article.id : 'null'}
-      setup(tag_setup, write_setup)
+      $(document).ready(function () {
+        var $target = $('#article')
+        var targetId = $target.data('id')
+        var draftId = $target.data('draft-id')
+        var write = new Write($target[0], targetId, draftId)
+        console.info('The write component is initialized.')
+      })

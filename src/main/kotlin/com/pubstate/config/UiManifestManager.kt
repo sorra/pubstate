@@ -32,6 +32,7 @@ object UiManifestManager {
 
   private fun refresh() {
     if (file.lastModified() > lastModified) {
+      // globally synchronized, only happens when really modified
       load()
     }
   }

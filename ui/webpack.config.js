@@ -9,12 +9,13 @@ module.exports = env => {
   let isDev = env.development;
   let isProd = env.production;
 
-  let minimizers = isProd ? [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})] : null;
+  let minimizers = isProd ? [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})] : [];
 
   return {
     mode: 'development',
     entry: {
-      main: './src/index.js'
+      main: './src/index.js',
+      write: './src/write/write.js'
     },
     output: {
       filename: '[name].[contenthash].js',
