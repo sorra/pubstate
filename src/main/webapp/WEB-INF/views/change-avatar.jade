@@ -1,0 +1,36 @@
+extends layout.jade
+
+block customHeader
+  title Change Avatar
+  style.
+    .color-picker input {
+      opacity: 0.5;
+      width: 0;
+    }
+    .color-picker img {
+      padding: 5px;
+    }
+    .color-picker input:focus + * {
+      border: 5px dashed yellow;
+      margin: 0;
+    }
+    .color-picker input:checked + * {
+      border: 5px solid yellow;
+      padding: 0;
+    }
+
+block mainContent
+  form#avatar-form(action="/profile/avatar" method="post" enctype="multipart/form-data")
+    #avatar-uploader
+      label Upload an image, or pick a color avatar, otherwise a random color will be assigned
+      input(name="avatar" type="file")
+      input(type="submit")
+      br
+      img(src="#{cdn}/files/avatar/#{user.avatar}")
+    #color-avatars
+      #color-avatars-label Color avatars:
+      for i in [1,2,3,4,5,6,7]
+        label.color-picker
+          input(name="color" value=i type="radio")
+          img(src="#{cdn}/files/avatar/color#{i}.png")
+      input(name="colorAvatar" type="text" style="display:none")

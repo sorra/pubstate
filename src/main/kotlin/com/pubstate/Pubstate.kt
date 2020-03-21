@@ -1,5 +1,7 @@
 package com.pubstate
 
+import com.pubstate.domain.enum.Folder
+import com.pubstate.domain.service.FileService
 import com.pubstate.web.base.PageDefaultModelInterceptor
 import com.pubstate.web.filter.AccessLoggingFilter
 import com.pubstate.web.filter.AuthFilter
@@ -13,7 +15,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import java.sql.Timestamp
+import java.time.Instant
 
 /**
  * Application starter; component scan locator
@@ -22,7 +24,22 @@ import java.sql.Timestamp
 class PubState : WebMvcConfigurer {
 
   override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-    registry.addResourceHandler("/static/**").addResourceLocations("/static/")
+    registry.addResourceHandler("/static/**")
+        .addResourceLocations("/static/")
+
+    for (folder in Folder.values()) {
+      registry.addResourceHandler("/files/${folder.folderName}/**")
+          .addResourceLocations(fileUrl(FileService.folderFilePath(folder)))
+    }
+  }
+
+  private fun fileUrl(path: String): String {
+    return if (path.startsWith("/")) {
+      "file:$path/"
+    }
+    else {
+      "file:///$path/"
+    }
   }
 
   override fun addInterceptors(registry: InterceptorRegistry) {
@@ -54,6 +71,6 @@ fun main(args: Array<String>) {
   SpringApplication.run(PubState::class.java, *args)
 
   // Show a success message in console, because production logs are not printed in console
-  System.out.println("[${Timestamp(System.currentTimeMillis())}] Server is started.")
+  System.out.println("[${Instant.now()}] Server is started.")
   System.out.flush()
 }

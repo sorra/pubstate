@@ -1,0 +1,26 @@
+extends layout.jade
+
+block customHeader
+  title User Profile
+
+block mainContent
+  div
+    div
+      img#user-avatar(src="#{cdn}/files/avatar/#{user.avatar}")
+      a(href="/profile/avatar") Change avatar
+    div
+      span Name: 
+      span#user-name= user.name
+      span#edit-user-name(style="display:none")
+        input
+        button.b-submit Submit
+        buttong.b-cancel Cancel
+      a Edit
+    div
+      span Introduction: 
+      span#user-intro= user.intro
+      span#edit-user-intro(style="display:none")
+        input
+        button.b-submit Submit
+        buttong.b-cancel Cancel
+      a Edit
