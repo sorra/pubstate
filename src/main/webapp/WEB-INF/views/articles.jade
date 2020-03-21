@@ -4,11 +4,4 @@ block customHeader
   title Articles
 
 block mainContent
-  for article in articles
-    ul#articles
-      li.article
-        a(href="/articles/#{article.id}")
-          h3= article.title
-        div
-          +userLabel(article.author)
-          +humanTimeLabel(article.whenCreated)
+  +articlesList(articles)

@@ -57,4 +57,8 @@ class ArticleService {
   fun mustGet(id: Long): Article {
     return Article.mustGet(id)
   }
+
+  fun listByAuthor(authorId: Long): List<Article> {
+    return Article.listByAuthor(authorId)
+  }
 }

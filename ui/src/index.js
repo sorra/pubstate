@@ -1,5 +1,6 @@
 import './index.css'
 import './topnav.css'
+import './user/user.css'
 import './write/write.js'
 
 console.info('Application is loaded')

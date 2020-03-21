@@ -12,6 +12,6 @@ class HomeController : BaseController() {
     if (!ManageService.inited()) {
       return "redirect:/manage/init"
     }
-    return "index"
+    return "forward:/articles"
   }
 }

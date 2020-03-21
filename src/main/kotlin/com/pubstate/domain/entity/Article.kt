@@ -23,5 +23,11 @@ class Article(var title: String,
   @SoftDelete
   var deleted: Boolean = false
 
-  companion object : BaseFinder<Long, Article>(Article::class.java)
+  companion object : BaseFinder<Long, Article>(Article::class.java) {
+    fun listByAuthor(authorId: Long): List<Article> {
+      return query().where()
+          .eq("author", User.ref(authorId))
+          .findList()
+    }
+  }
 }

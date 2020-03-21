@@ -35,11 +35,11 @@ mixin footer
   +libJs(['jquery', 'bootstrap'])
   +distJs(['runtime', 'vendors', 'main'])
 
-mixin userLabel(u)
-  span.user-label(data-id=u.id)
-    a.user-avatar(href="/users/#{u.id}")
-      img(src="#{cdn}/static/avatars/#{u.avatar}")
-    a.user-name(href="/users/#{u.id}")= u.name
+mixin userLabel(user)
+  span.user-label(data-id=user.id)
+    a.user-avatar(href="/users/#{user.id}")
+      img(src="#{cdn}/files/avatar/#{user.avatar}")
+    a.user-name(href="/users/#{user.id}")= user.name
 
 mixin humanTimeLabel(dt)
   span.human-time(data-time=dt.time)= HumanTime.render(dt)
@@ -47,3 +47,17 @@ mixin humanTimeLabel(dt)
 mixin showCount(count)
   if count > 0
     | #{count}
+
+mixin articlesList(articles)
+  if articles
+    for article in articles
+      ul#articles
+        li.article
+          a(href="/articles/#{article.id}")
+            h3= article.title
+          div
+            +userLabel(article.author)
+            +humanTimeLabel(article.whenCreated)
+            block
+  else
+    div Missing articles variable
