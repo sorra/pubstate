@@ -17,13 +17,13 @@ abstract class BaseFinder<K, T>(private val entityClass: Class<T>) : Finder<K, T
   }
 
   fun Query<T>.findPageAsc(pageNum: Int, pageSize: Int): PagedList<T> =
-      this.orderBy("id asc")
+      this.order("id asc")
           .setFirstRow(PaginationUtil.offset(pageNum, pageSize))
           .setMaxRows(pageSize)
           .findPagedList()
 
   fun Query<T>.findPageDesc(pageNum: Int, pageSize: Int): PagedList<T> =
-      this.orderBy("id desc")
+      this.order("id desc")
           .setFirstRow(PaginationUtil.offset(pageNum, pageSize))
           .setMaxRows(pageSize)
           .findPagedList()

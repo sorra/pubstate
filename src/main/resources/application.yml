@@ -20,7 +20,8 @@ datasource:
     databaseDriver: com.mysql.jdbc.Driver
 
 ebean:
-  db:
-    ddl:
-      generate: true
-      run: false
+  ddl:
+    generate: true
+    run: false
+  migration:
+    run: true
