@@ -1,4 +1,13 @@
-.user-label img {
+.user-avatar {
+  margin: 2px;
+}
+
+.user-avatar img {
+  width: 50px;
+  height: 50px;
+}
+
+.user-label .user-avatar img {
   width: 25px;
   height: 25px;
 }

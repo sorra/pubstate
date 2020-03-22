@@ -7,7 +7,7 @@ mixin js(path)
 mixin libCss(names)
   for name in Resources.convertLibNames(names, '.css')
     +css(cdn + "/static/lib/css/" + name)
-  
+
 mixin libJs(names)
   for name in Resources.convertLibNames(names, '.js')
     +js(cdn + "/static/lib/js/" + name)
