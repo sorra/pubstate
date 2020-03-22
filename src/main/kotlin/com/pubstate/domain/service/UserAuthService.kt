@@ -26,8 +26,10 @@ class UserAuthService {
 
     user.password = encryptPassword(user.password)
     user.save()
-    if(user.name.isEmpty()) user.name = "u" + user.id
+
+    if(user.name.isBlank()) user.name = "u" + user.id
     user.update()
+
     return user.id
   }
 

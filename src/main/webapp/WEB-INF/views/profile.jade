@@ -8,19 +8,25 @@ block mainContent
     div
       img#user-avatar(src="#{cdn}/files/avatar/#{user.avatar}")
       a(href="/profile/avatar") Change avatar
-    div
-      span Name: 
-      span#user-name= user.name
-      span#edit-user-name(style="display:none")
-        input
-        button.b-submit Submit
-        buttong.b-cancel Cancel
-      a Edit
-    div
-      span Introduction: 
-      span#user-intro= user.intro
-      span#edit-user-intro(style="display:none")
-        input
-        button.b-submit Submit
-        buttong.b-cancel Cancel
-      a Edit
+    div#user-name-control
+      label Name:
+      span.display-bar
+        span.display-value= user.name
+        a.edit-btn(href="javascript:;") Edit
+      span.edit-bar(style="display:none")
+        input.input-el(name='name')
+        button.confirm-btn Confirm
+        button.cancel-btn Cancel
+    div#user-intro-control
+      label Introduction:
+      span.display-bar
+        span.display-value= user.intro
+        a.edit-btn(href="javascript:;") Edit
+      span.edit-bar(style="display:none")
+        input.input-el(name='intro')
+        button.confirm-btn Confirm
+        button.cancel-btn Cancel
+
+block customFooter
+  script.
+    var profileEditor = new ProfileEditor()

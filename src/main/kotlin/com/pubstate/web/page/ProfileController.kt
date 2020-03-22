@@ -6,10 +6,7 @@ import com.pubstate.web.base.BaseController
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.ModelAndView
 
@@ -26,11 +23,15 @@ class ProfileController : BaseController() {
   }
 
   @PostMapping
+  @ResponseBody
   fun update(@RequestParam name: String?, @RequestParam intro: String?) {
     val currentUser = userService.currentUser()
 
     val updatedAttrs = mutableListOf<String>()
     if (name != null) {
+      if (name.isBlank()) {
+        throw BadArgumentException("name should not be blank")
+      }
       currentUser.name = name
       updatedAttrs += "name"
     }
