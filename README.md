@@ -8,7 +8,7 @@ Technology stack:
 
 Development setup:
 * Install JDK 8+ and MySQL 5.6+
-* Login MySQL as "root" user, run scripts db-setup.sql and db-create-all.sql together
+* Login MySQL as "root" user, run scripts db-setup.sql and build/db-create-all.sql together
 * Login MySQL as "pubstate" user, you are be able to see the "pubstate" database
 * Import as a Gradle project to your Java IDE (with Kotlin plugin, Intellij is preferred)
 * In IDE, run the file Pubstate.kt

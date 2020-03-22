@@ -8,6 +8,8 @@ drop table if exists article;
 
 drop table if exists comment;
 
+drop table if exists file_item;
+
 drop table if exists login_pass;
 
 drop table if exists user;
