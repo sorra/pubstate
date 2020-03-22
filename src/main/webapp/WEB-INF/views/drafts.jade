@@ -1,0 +1,10 @@
+extends layout.jade
+
+block mainContent
+  h1 Drafts
+  ul#drafts
+    for draft in drafts
+      li
+        a(href="/drafts/#{draft.id}")= draft.title.isEmpty() ? '(No title)' : draft.title
+        span &nbsp;Last update at&nbsp;
+        +humanTimeLabel(draft.whenModified)

@@ -25,6 +25,19 @@ create table comment (
   constraint pk_comment primary key (id)
 );
 
+create table draft (
+  id                            bigint auto_increment not null,
+  target_id                     bigint not null,
+  title                         varchar(255) not null,
+  input_content                 TEXT not null,
+  format_type                   integer not null,
+  author_id                     bigint not null,
+  version                       bigint not null,
+  when_created                  datetime(6) not null,
+  when_modified                 datetime(6) not null,
+  constraint pk_draft primary key (id)
+);
+
 create table file_item (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
@@ -66,4 +79,7 @@ alter table article add constraint fk_article_author_id foreign key (author_id) 
 
 create index ix_comment_author_id on comment (author_id);
 alter table comment add constraint fk_comment_author_id foreign key (author_id) references user (id) on delete restrict on update restrict;
+
+create index ix_draft_author_id on draft (author_id);
+alter table draft add constraint fk_draft_author_id foreign key (author_id) references user (id) on delete restrict on update restrict;
 

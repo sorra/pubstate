@@ -122,38 +122,42 @@ class Write {
     // treat unchanged data as initial draft
     let savedDraft = this.getData(true)
 
+    const autosaveInterval = 3000
+
     let saveDraft = () => {
       let liveData = this.getData()
       if (isEqual(liveData, savedDraft)) {
-        setTimeout(saveDraft, 3000)
+        setTimeout(saveDraft, autosaveInterval)
         return
       }
 
-      let params = {
+      let payload = {
         draftId: this.draftId,
         targetId: this.targetId,
         format: liveData.format,
         title: liveData.title,
-        content: liveData.content
+        content: liveData.content,
+        format: liveData.format
       }
 
-      //TODO limit concurrency to a single queue
-      $.post("/drafts/save", params).done(function (resp) {
-        let respDraftId = parseInt(resp)
-        if (respDraftId) {
-          draftId = respDraftId
-        }
-        savedDraft = liveData
-
-        Common.popAlert('Draft is autosaved', 'info', 1000)
-      }).fail(function (resp) {
-        Common.popAlert('Draft autosave failed: ' + Common.toErrorMsg(resp))
-      }).always(function () {
-        setTimeout(saveDraft, 3000)
-      })
+      $.post("/drafts/save", payload)
+        .done(resp => {
+          let respDraftId = parseInt(resp)
+          if (respDraftId) {
+            this.draftId = respDraftId
+            savedDraft = liveData
+            Common.popAlert('Draft is autosaved', 'info', 1000)
+          } else {
+            console.info('Draft autosave skipped')
+          }
+        }).fail(resp => {
+          Common.popAlert('Draft autosave failed: ' + Common.toErrorMsg(resp), 'error')
+        }).always(() => {
+          setTimeout(saveDraft, autosaveInterval)
+        })
     }
 
-    setTimeout(saveDraft, 3000)
+    setTimeout(saveDraft, autosaveInterval)
   }
 }
 
