@@ -16,7 +16,9 @@ object Auth {
 
   private const val TOKEN_NAME = "web_token"
 
-  class AuthPack(val request: HttpServletRequest, val response: HttpServletResponse, var uid: Long? = null)
+  class AuthPack(val request: HttpServletRequest,
+                 val response: HttpServletResponse,
+                 var uid: Long? = null)
 
   // Always set by servlet filter
   private fun current(): AuthPack = RequestContextHolder.currentRequestAttributes()
@@ -67,14 +69,16 @@ object Auth {
   fun logout() {
     val current = current()
 
-    val cookie = current.request.cookies?.find { it.name == TOKEN_NAME } ?: return
-    cookie.maxAge = 0 // 0 = delete
-//    LoginPass.deleteById(cookie.value)
+    val cookie = current.request.cookies?.find { it.name == TOKEN_NAME }?.also {
+      LoginPass.deleteById(it.value) // must delete from DB to forbid access
+      it.maxAge = 0 // 0 = delete
+      current.response.addCookie(it)
+    }
+    current.request.getSession(false)?.invalidate()
 
-    val uid = current.uid
+
+    logger.info("User[{}] logout successfully", current.uid)
     current.uid = null
-
-    logger.info("User[{}] logout successfully", uid)
   }
 
   fun getRedirectGoto(requestLink: String): String {
