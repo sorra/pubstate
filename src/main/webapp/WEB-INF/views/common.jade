@@ -50,8 +50,8 @@ mixin showCount(count)
 
 mixin articlesList(articles)
   if articles != null
-    for article in articles
-      ul#articles
+    ul#articles
+      for article in articles
         li.article
           a(href="/articles/#{article.id}")
             h3= article.title
@@ -59,7 +59,7 @@ mixin articlesList(articles)
             +userLabel(article.author)
             +humanTimeLabel(article.whenCreated)
             block
-    else
-      div No articles
+      else
+        div No articles
   else
     div Missing articles variable

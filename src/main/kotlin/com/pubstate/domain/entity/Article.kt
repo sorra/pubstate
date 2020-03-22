@@ -5,19 +5,20 @@ import io.ebean.annotation.SoftDelete
 import javax.persistence.*
 
 @Entity
-class Article(var title: String,
+class Article(
+    var title: String,
 
-              @Basic(fetch = FetchType.LAZY)
-              @Column(columnDefinition = TEXT_COLUMN_DEF)
-              var inputContent: String,
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = TEXT_COLUMN_DEF)
+    var inputContent: String,
 
-              @Column(columnDefinition = TEXT_COLUMN_DEF)
-              var outputContent: String,
+    @Column(columnDefinition = TEXT_COLUMN_DEF)
+    var outputContent: String,
 
-              var formatType: FormatType,
+    var formatType: FormatType,
 
-              @ManyToOne(optional = false)
-              var author: User
+    @ManyToOne(optional = false)
+    var author: User
 ) : AutoModel() {
 
   @SoftDelete
