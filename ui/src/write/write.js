@@ -13,8 +13,8 @@ class Write {
       trigger: 'manual'
     })
 
-    this.$root.submit(() => {
-      return this.onSubmit()
+    this.$root.submit(ev => {
+      this.onSubmit(ev)
     })
 
     this.contentEditor = this.createEditor()
@@ -23,52 +23,39 @@ class Write {
     this.setupDraftAutosave()
   }
 
-  onSubmit() {
-    try {
-      let $form = this.$root
-      let selectedTagIds = []
-      $form.find('.tag-sel.btn-success').each(function (idx) {
-        let tagId = parseInt($(this).attr('tag-id'))
-        selectedTagIds.push(tagId)
-      })
+  onSubmit(ev) {
+    ev.preventDefault()
 
-      let $submit = $form.find('.btn-submit')
-      let $titleEdit = $('#title-edit')
-      if ($titleEdit.val().length == 0) {
-        $titleEdit.fadeOut().fadeIn()
-        Common.popAlert('Title is empty, please input.')
-        return false
-      }
+    let data = this.getData()
 
-      let contentValue = this.contentEditor.getContent()
-      $('#content-edit').val(contentValue)
-      if (contentValue.length == 0) {
-        $('#editor-wrapper').fadeOut().fadeIn()
-        Common.popAlert('Content is empty, please input.')
-        return false
-      }
-
-      $submit.prop('disabled', true)
-      $form.ajaxSubmit({
-        data: {
-          tagIds: selectedTagIds,
-          draftId: this.draftId
-        },
-        success: function (url) {
-          console.info(url)
-          // window.location = url
-        },
-        error: function (msg) {
-          let $submit = $form.find('.btn-submit')
-          Common.popAlert('Publish failed: ' + msg)
-          $submit.prop('disabled', false)
-        }
-      })
-    } catch (ex) {
-      console.error(ex)
-    } finally {
-      return false
+    if (data.title.length == 0) {
+      $('#title-edit').fadeOut().fadeIn()
+      Common.popAlert('Title is empty, please input.')
+      return
     }
+
+    if (data.content.length == 0) {
+      $('#editor-wrapper').fadeOut().fadeIn()
+      Common.popAlert('Content is empty, please input.')
+      return
+    }
+
+    let $form = this.$root
+    let $submit = $form.find('.btn-submit')
+
+    let url = $form.attr('action')
+    data.draftId = this.draftId
+    
+    $.post(url, data)
+      .done(resp => {
+        window.location = resp
+      })
+      .fail(resp => {
+        Common.popAlert('Publish failed because: ' + msg)
+        $submit.prop('disabled', false)
+      })
+
+    $submit.prop('disabled', true)
   }
 
   createEditor() {
@@ -91,7 +78,7 @@ class Write {
       }
     }
   }
-  
+
   createRichtextEditor() {
     tinymce.init({
       selector: '#content-edit',
@@ -134,14 +121,14 @@ class Write {
   setupDraftAutosave() {
     // treat unchanged data as initial draft
     let savedDraft = this.getData(true)
-  
+
     let saveDraft = () => {
       let liveData = this.getData()
       if (isEqual(liveData, savedDraft)) {
         setTimeout(saveDraft, 3000)
         return
       }
-  
+
       let params = {
         draftId: this.draftId,
         targetId: this.targetId,
@@ -149,7 +136,7 @@ class Write {
         title: liveData.title,
         content: liveData.content
       }
-  
+
       //TODO limit concurrency to a single queue
       $.post("/drafts/save", params).done(function (resp) {
         let respDraftId = parseInt(resp)
@@ -157,7 +144,7 @@ class Write {
           draftId = respDraftId
         }
         savedDraft = liveData
-  
+
         Common.popAlert('Draft is autosaved', 'info', 1000)
       }).fail(function (resp) {
         Common.popAlert('Draft autosave failed: ' + Common.toErrorMsg(resp))
@@ -165,7 +152,7 @@ class Write {
         setTimeout(saveDraft, 3000)
       })
     }
-  
+
     setTimeout(saveDraft, 3000)
   }
 }
