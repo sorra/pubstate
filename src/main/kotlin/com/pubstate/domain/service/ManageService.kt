@@ -33,6 +33,6 @@ class ManageService : HasServices() {
   companion object {
     private val lock = ReentrantLock()
 
-    fun inited() = true // User.byId(1L) != null
+    fun inited() = User.byId(1L) != null
   }
 }
