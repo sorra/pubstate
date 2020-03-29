@@ -1,7 +1,6 @@
 package com.pubstate.domain.entity
 
 import com.pubstate.domain.enum.FormatType
-import io.ebean.Finder
 import javax.persistence.*
 
 @Entity
@@ -18,9 +17,9 @@ class Draft(
     @ManyToOne(optional = false)
     val author: User) : AutoModel() {
 
-  companion object : Finder<Long, Draft>(Draft::class.java) {
-    fun listByAuthor(authorId: Long): List<Article> {
-      return Article.query().where()
+  companion object : BaseFinder<Long, Draft>(Draft::class.java) {
+    fun listByAuthor(authorId: Long): List<Draft> {
+      return query().where()
           .eq("author", User.ref(authorId))
           .findList()
     }

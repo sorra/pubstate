@@ -8,3 +8,10 @@ block mainContent
         a(href="/drafts/#{draft.id}")= draft.title.isEmpty() ? '(No title)' : draft.title
         span &nbsp;Last update at&nbsp;
         +humanTimeLabel(draft.whenModified)
+        button.delete-btn(data-id=draft.id) Delete
+
+block customFooter
+  script.
+    $(document).ready(function() {
+      window.draftManager = new DraftManager()
+    })

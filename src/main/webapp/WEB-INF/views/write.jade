@@ -66,6 +66,6 @@ block customFooter
         var $target = $('#article')
         var targetId = $target.data('id')
         var draftId = $target.data('draft-id')
-        var write = new Write($target[0], targetId, draftId)
+        window.write = new Write($target[0], targetId, draftId)
         console.info('The write component is initialized.')
       })

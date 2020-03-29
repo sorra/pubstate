@@ -86,5 +86,15 @@ class DraftController : BaseController() {
     }
   }
 
+  @PostMapping("/{id}/delete")
+  @ResponseBody
+  fun delete(@PathVariable id: Long) {
+    val uid = Auth.checkUid()
+    val draft = Draft.mustGet(id)
+
+    DraftPermission(uid, draft).canDelete()
+    draft.delete()
+  }
+
   private fun String.toEnum(): FormatType = FormatType.valueOf(toUpperCase())
 }
