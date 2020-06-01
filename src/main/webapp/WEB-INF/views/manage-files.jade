@@ -1,0 +1,8 @@
+extends layout.jade
+
+block customHeader
+  title Manage Files
+
+block mainContent
+  +filesList(articles)
+    button.btn.btn-xs.btn-default Delete

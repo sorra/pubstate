@@ -57,9 +57,26 @@ mixin articlesList(articles)
             h3= article.title
           div
             +userLabel(article.author)
+            span &nbsp;Created at&nbsp;
             +humanTimeLabel(article.whenCreated)
+            span &nbsp;Modified at&nbsp;
+            +humanTimeLabel(article.whenModified)
             block
       else
         div No articles
   else
     div Missing articles variable
+
+mixin filesList(files)
+  if files != null
+    ul#files
+      for file in files
+        li.file
+          a(href="/files/#{file.id}")
+            h3= file.name
+          div
+            +userLabel(file.owner)
+            +humanTimeLabel(file.whenCreated)
+            block
+      else
+        div No files

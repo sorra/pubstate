@@ -23,3 +23,5 @@ ebean:
   ddl:
     generate: true
     run: false
+  migration:
+    run: true

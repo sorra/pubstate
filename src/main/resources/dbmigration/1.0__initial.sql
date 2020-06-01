@@ -1,3 +1,4 @@
+-- apply changes
 create table article (
   id                            bigint auto_increment not null,
   when_created                  datetime(6) not null,

@@ -9,7 +9,7 @@ class Draft(
 
     var title: String,
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = TEXT_COLUMN_DEF)
     var inputContent: String,
 
     var formatType: FormatType,

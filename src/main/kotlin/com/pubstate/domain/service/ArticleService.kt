@@ -7,6 +7,7 @@ import com.pubstate.domain.permission.ArticlePermission
 import com.pubstate.util.HtmlUtil
 import com.pubstate.util.MarkdownUtil
 import org.springframework.stereotype.Service
+import java.sql.Timestamp
 
 @Service
 class ArticleService {
@@ -33,6 +34,7 @@ class ArticleService {
       it.inputContent = content
       it.outputContent = render(content, formatType)
       it.formatType = formatType
+      it.whenModified = Timestamp(System.currentTimeMillis())
       it.save()
     }
   }
@@ -45,7 +47,7 @@ class ArticleService {
     article.delete()
   }
 
-  private fun render(input: String, formatType: FormatType): String {
+  fun render(input: String, formatType: FormatType): String {
     var output = input
     if (formatType == FormatType.MARKDOWN) {
       output = MarkdownUtil.render(input)

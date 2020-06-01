@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="article" pkName="pk_article">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+            <column name="title" type="varchar" notnull="true"/>
+            <column name="input_content" type="TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" notnull="true"/>
+            <column name="output_content" type="TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" notnull="true"/>
+            <column name="format_type" type="integer" notnull="true" checkConstraint="check ( format_type in (0,1,2))" checkConstraintName="ck_article_format_type"/>
+            <column name="author_id" type="bigint" notnull="true" references="user.id" foreignKeyName="fk_article_author_id" foreignKeyIndex="ix_article_author_id"/>
+            <column name="deleted" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+        <createTable name="comment" pkName="pk_comment">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="content" type="TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" notnull="true"/>
+            <column name="author_id" type="bigint" notnull="true" references="user.id" foreignKeyName="fk_comment_author_id" foreignKeyIndex="ix_comment_author_id"/>
+            <column name="target_type" type="integer" notnull="true" checkConstraint="check ( target_type in (0,1))" checkConstraintName="ck_comment_target_type"/>
+            <column name="target_id" type="bigint" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+            <column name="deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="draft" pkName="pk_draft">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="target_id" type="bigint" notnull="true"/>
+            <column name="title" type="varchar" notnull="true"/>
+            <column name="input_content" type="TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci" notnull="true"/>
+            <column name="format_type" type="integer" notnull="true" checkConstraint="check ( format_type in (0,1,2))" checkConstraintName="ck_draft_format_type"/>
+            <column name="author_id" type="bigint" notnull="true" references="user.id" foreignKeyName="fk_draft_author_id" foreignKeyIndex="ix_draft_author_id"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="file_item" pkName="pk_file_item">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+            <column name="kind" type="varchar" notnull="true"/>
+            <column name="owner_id" type="bigint" notnull="true"/>
+            <column name="stored_path" type="varchar" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="login_pass" identityType="external" pkName="pk_login_pass">
+            <column name="pass_id" type="varchar" primaryKey="true"/>
+            <column name="user_id" type="bigint" notnull="true"/>
+            <column name="when_to_expire" type="timestamp" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="user" pkName="pk_user">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="email" type="varchar" notnull="true"/>
+            <column name="password" type="varchar" notnull="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+            <column name="avatar" type="varchar" notnull="true"/>
+            <column name="intro" type="varchar" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+            <column name="deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>

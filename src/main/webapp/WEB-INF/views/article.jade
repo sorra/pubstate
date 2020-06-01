@@ -8,7 +8,10 @@ block mainContent
     h1= article.title
     div
       +userLabel(article.author)
+      span &nbsp;Created at&nbsp;
       +humanTimeLabel(article.whenCreated)
+      span &nbsp;Modified at&nbsp;
+      +humanTimeLabel(article.whenModified)
       if article.author.id == userSelf.id
         a(href="/articles/#{article.id}/edit") Edit
     div!= article.outputContent
