@@ -13,7 +13,7 @@ import java.sql.Timestamp
  */
 class ArticleTool {
 
-  fun import(data: String, articleService: ArticleService, id: Long) {
+  fun import(data: String, articleService: ArticleService, assignedId: Long? = null) {
     ObjectMapper().readValue(data, ArticleInfo::class.java).run {
       val ar = Article(
           title = title,
@@ -22,8 +22,10 @@ class ArticleTool {
           formatType = formatType,
           author = User.ref(authorId)
       )
-//      id?.let { ar.id = it }
-      ar.id = id
+
+      (assignedId ?: id)?.let {
+        ar.id = it
+      }
       version?.let { ar.version = it }
       whenCreated?.let { ar.whenCreated = it }
       whenModified?.let { ar.whenModified = it }

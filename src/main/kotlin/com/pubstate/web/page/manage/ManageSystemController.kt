@@ -12,13 +12,14 @@ import java.io.File
 import java.nio.file.Paths
 
 @Controller
-@RequestMapping("/manage")
-class ManageController(
+@RequestMapping("/manage/system")
+class ManageSystemController(
     @Autowired
     private val manageService: ManageService,
     @Autowired
     private val articleService: ArticleService
 ) {
+
   @GetMapping("/init")
   fun initPage(model: ModelMap): String {
     model.addAttribute("inited", ManageService.inited())
@@ -28,7 +29,7 @@ class ManageController(
   @PostMapping("/init")
   fun init(@RequestParam email: String, @RequestParam password: String, @RequestParam name: String): String {
     manageService.init(email, password, name)
-    return "redirect:/manage/init"
+    return "redirect:$INIT_PATH"
   }
 
   @RequestMapping("/import-articles")
@@ -45,7 +46,7 @@ class ManageController(
         .sortedBy { it.name.removeSuffix(".json").toLong() }
         .forEach {
           count++
-          ArticleTool().import(it.readText(), articleService, count.toLong())
+          ArticleTool().import(it.readText(), articleService)
         }
     return "Imported $count items"
   }
@@ -69,5 +70,9 @@ class ManageController(
 
   private fun articlesFolder(): File {
     return Paths.get(System.getProperty("user.home"), "pubstate-articles").toFile()
+  }
+
+  companion object {
+    const val INIT_PATH = "/manage/system/init"
   }
 }
