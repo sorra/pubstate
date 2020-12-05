@@ -59,8 +59,9 @@ mixin articlesList(articles)
             +userLabel(article.author)
             span &nbsp;Created at&nbsp;
             +humanTimeLabel(article.whenCreated)
-            span &nbsp;Modified at&nbsp;
-            +humanTimeLabel(article.whenModified)
+            if article.whenCreated != article.whenModified
+              span &nbsp;Modified at&nbsp;
+              +humanTimeLabel(article.whenModified)
             block
       else
         div No articles
