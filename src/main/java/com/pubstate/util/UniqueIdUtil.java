@@ -15,7 +15,8 @@ public final class UniqueIdUtil {
     ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[16]);
     byteBuffer.putLong(uuid.getMostSignificantBits());
     byteBuffer.putLong(uuid.getLeastSignificantBits());
-    return Base64.getUrlEncoder().encodeToString(byteBuffer.array());
+    byte[] encoded = Base64.getUrlEncoder().encode(byteBuffer.array());
+    return new String(encoded, 0, 22);
   }
 
   public static String one() {
