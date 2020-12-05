@@ -10,8 +10,8 @@ import java.util.concurrent.locks.ReentrantLock
 @Service
 class ManageService : HasServices() {
 
-  fun init(email: String, password: String, name: String) {
-    if (inited()) {
+  fun intialize(email: String, password: String, name: String) {
+    if (isInitialized()) {
       return
     }
 
@@ -21,7 +21,7 @@ class ManageService : HasServices() {
     if (lock.tryLock()) {
       try {
         Ebean.execute {
-          if (inited()) {
+          if (isInitialized()) {
             return@execute
           }
           userAuthService.signup(user)
@@ -33,10 +33,10 @@ class ManageService : HasServices() {
       throw DomainException("Cannot acquire lock for init!")
     }
   }
+  
+  fun isInitialized() = userAuthService.isSystemInitialized()
 
   companion object {
     private val lock = ReentrantLock()
-
-    fun inited() = User.byId(UniqueIdUtil.one()) != null
   }
 }

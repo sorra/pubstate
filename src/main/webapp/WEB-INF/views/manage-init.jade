@@ -8,7 +8,7 @@ block mainContent
     p All set!
     a(href="/") Return Home
   else
-    form.auth_form(action="/manage/init", method="post")
+    form.auth_form(action="/manage/system/init", method="post")
         h3.heading Create admin account
         .input-group
           label(for="email") Email

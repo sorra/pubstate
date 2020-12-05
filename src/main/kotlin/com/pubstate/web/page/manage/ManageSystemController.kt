@@ -22,13 +22,13 @@ class ManageSystemController(
 
   @GetMapping("/init")
   fun initPage(model: ModelMap): String {
-    model.addAttribute("inited", ManageService.inited())
+    model.addAttribute("inited", manageService.isInitialized())
     return "manage-init"
   }
 
   @PostMapping("/init")
   fun init(@RequestParam email: String, @RequestParam password: String, @RequestParam name: String): String {
-    manageService.init(email, password, name)
+    manageService.intialize(email, password, name)
     return "redirect:$INIT_PATH"
   }
 

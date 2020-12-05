@@ -2,11 +2,14 @@ package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.User
 import com.pubstate.exception.DomainException
+import com.pubstate.util.UniqueIdUtil
 import org.jasypt.util.password.StrongPasswordEncryptor
 import org.springframework.stereotype.Service
 
 @Service
 class UserAuthService {
+
+  fun isSystemInitialized() = User.byId(UniqueIdUtil.one()) != null
 
   fun checkLogin(email: String, password: String): User {
     val user = User.byEmail(email)
@@ -20,6 +23,10 @@ class UserAuthService {
   }
 
   fun signup(user: User): String {
+    if (!isSystemInitialized() && user.id != UniqueIdUtil.one()) {
+      throw DomainException("First time to run the system, need to initialize")
+    }
+
     if (User.byEmail(user.email) != null) {
       throw DomainException("Signup failed: email %s is already used", user.email)
     }
