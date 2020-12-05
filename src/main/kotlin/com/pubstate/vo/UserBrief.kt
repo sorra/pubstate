@@ -4,6 +4,6 @@ import com.pubstate.annotation.KotlinNoArg
 
 @KotlinNoArg
 data class UserBrief(
-    var id: Long,
+    var id: String,
     var name: String,
     var avatar: String)

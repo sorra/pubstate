@@ -16,7 +16,7 @@ class LoginPass(
     var passId: String,
 
     @Column(nullable = false)
-    var userId: Long,
+    var userId: String,
 
     @Column(nullable = false)
     var whenToExpire: Instant

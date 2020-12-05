@@ -18,15 +18,15 @@ object Auth {
 
   class AuthPack(val request: HttpServletRequest,
                  val response: HttpServletResponse,
-                 var uid: Long? = null)
+                 var uid: String? = null)
 
   // Always set by servlet filter
   private fun current(): AuthPack = RequestContextHolder.currentRequestAttributes()
       .getAttribute("authPack", RequestAttributes.SCOPE_REQUEST) as AuthPack
 
-  fun checkUid(): Long = uid() ?: throw RequireLoginException()
+  fun checkUid(): String = uid() ?: throw RequireLoginException()
 
-  fun uid(): Long? {
+  fun uid(): String? {
     val current = current()
     if (current.uid != null) {
       return current.uid
@@ -44,7 +44,7 @@ object Auth {
     }
   }
 
-  fun login(userId: Long, rememberMe: Boolean) {
+  fun login(userId: String, rememberMe: Boolean) {
     val current = current()
 
     current.request.getSession(false)?.invalidate()

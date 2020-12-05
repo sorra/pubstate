@@ -21,20 +21,20 @@ class FileService {
    * @return file name
    */
   @Throws(IOException::class)
-  fun upload(userId: Long, file: MultipartFile, folder: Folder): String {
+  fun upload(userId: String, file: MultipartFile, folder: Folder): String {
     val fm = findFolderManager(folder)
     return saveFile(userId, fm, folder, file)
   }
 
   @Throws(IOException::class)
-  fun multiUpload(userId: Long, files: Array<MultipartFile>, folder: Folder): Collection<String> {
+  fun multiUpload(userId: String, files: Array<MultipartFile>, folder: Folder): Collection<String> {
     val fm = findFolderManager(folder)
     return files.map { file ->
       saveFile(userId, fm, folder, file)
     }
   }
 
-  fun delete(userId: Long, fileId: Long) {
+  fun delete(userId: String, fileId: String) {
     val fileItem = FileItem.byId(fileId)
         ?: return
 
@@ -46,7 +46,7 @@ class FileService {
    * @return file name
    */
   @Throws(IOException::class)
-  private fun saveFile(ownerId: Long, fm: FolderManager, folder: Folder, file: MultipartFile): String {
+  private fun saveFile(ownerId: String, fm: FolderManager, folder: Folder, file: MultipartFile): String {
     if (file.size == 0L) {
       throw IllegalArgumentException("Rejected: file is empty!")
     }

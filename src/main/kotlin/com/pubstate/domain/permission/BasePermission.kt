@@ -3,9 +3,9 @@ package com.pubstate.domain.permission
 import com.pubstate.exception.PermissionDeniedException
 
 abstract class BasePermission {
-  abstract val userId: Long
+  abstract val userId: String
   abstract val target: Any
-  abstract val targetId: Long
+  abstract val targetId: String
 
   protected abstract fun judge(): Boolean
 

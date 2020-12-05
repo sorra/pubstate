@@ -12,19 +12,19 @@ import java.sql.Timestamp
 @Service
 class ArticleService {
 
-  fun create(uid: Long, title: String, content: String, formatType: FormatType): Article {
+  fun create(uid: String, title: String, content: String, formatType: FormatType): Article {
     return Article(
+        author = User.ref(uid),
         title = title,
         inputContent = content,
         outputContent = render(content, formatType),
-        formatType = formatType,
-        author = User.ref(uid)
+        formatType = formatType
     ).also {
       it.save()
     }
   }
 
-  fun update(uid: Long, id: Long, title: String, content: String, formatType: FormatType): Article {
+  fun update(uid: String, id: String, title: String, content: String, formatType: FormatType): Article {
     val article = mustGet(id)
 
     ArticlePermission(uid, article).canEdit()
@@ -39,7 +39,7 @@ class ArticleService {
     }
   }
 
-  fun delete(uid: Long, id: Long) {
+  fun delete(uid: String, id: String) {
     val article = mustGet(id)
 
     ArticlePermission(uid, article).canDelete()
@@ -56,11 +56,11 @@ class ArticleService {
     return HtmlUtil.secureClean(output)
   }
 
-  fun mustGet(id: Long): Article {
+  fun mustGet(id: String): Article {
     return Article.mustGet(id)
   }
 
-  fun listByAuthor(authorId: Long): List<Article> {
+  fun listByAuthor(authorId: String): List<Article> {
     return Article.listByAuthor(authorId)
   }
 }

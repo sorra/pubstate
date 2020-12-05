@@ -24,17 +24,11 @@ class DraftController : BaseController() {
   }
 
   @GetMapping("/{id}")
-  fun resume(@PathVariable id: Long): ModelAndView {
+  fun resume(@PathVariable id: String): ModelAndView {
     val currentUser = userService.currentUser()
 
     val article = Draft.byId(id)?.let { draft ->
-      if (draft.targetId > 0) {
-        Article.mustGet(draft.targetId).apply {
-          title = draft.title
-          inputContent = draft.inputContent
-          formatType = draft.formatType
-        }
-      } else {
+      if (draft.targetId.isEmpty()) {
         Article(
             title = draft.title,
             inputContent = draft.inputContent,
@@ -42,6 +36,12 @@ class DraftController : BaseController() {
             formatType = draft.formatType,
             author = currentUser
         )
+      } else {
+        Article.mustGet(draft.targetId).apply {
+          title = draft.title
+          inputContent = draft.inputContent
+          formatType = draft.formatType
+        }
       }
     } ?: throw DomainException("Draft[$id] does not exist")
 
@@ -52,15 +52,15 @@ class DraftController : BaseController() {
 
   @PostMapping("/save")
   @ResponseBody
-  fun save(@RequestParam(required = false) draftId: Long?,
-           @RequestParam(required = false) targetId: Long?,
+  fun save(@RequestParam(required = false) draftId: String?,
+           @RequestParam(required = false) targetId: String?,
            @RequestParam(defaultValue = "") title: String,
            @RequestParam(defaultValue = "") content: String,
-           @RequestParam format: String): Long {
+           @RequestParam format: String): String {
     val uid = Auth.checkUid()
 
     if (title.isBlank() && content.isBlank()) {
-      return 0L
+      return ""
     }
 
     return draftId?.let {
@@ -75,11 +75,11 @@ class DraftController : BaseController() {
       draft.id
     } ?: let {
       val draft = Draft(
-          targetId = targetId ?: 0,
+          author = User.ref(uid),
+          targetId = targetId ?: "",
           title = title,
           inputContent = content,
-          formatType = format.toEnum(),
-          author = User.ref(uid))
+          formatType = format.toEnum())
 
       draft.save()
       draft.id
@@ -88,7 +88,7 @@ class DraftController : BaseController() {
 
   @PostMapping("/{id}/delete")
   @ResponseBody
-  fun delete(@PathVariable id: Long) {
+  fun delete(@PathVariable id: String) {
     val uid = Auth.checkUid()
     val draft = Draft.mustGet(id)
 

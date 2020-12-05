@@ -12,7 +12,7 @@ class UserService {
     return findById(uid)
   }
 
-  fun findById(id: Long): User {
+  fun findById(id: String): User {
     return User.mustGet(id)
   }
 }

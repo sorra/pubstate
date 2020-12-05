@@ -20,7 +20,7 @@ class UserController : BaseController() {
   }
 
   @GetMapping("/{id}")
-  fun user(@PathVariable id: Long): ModelAndView {
+  fun user(@PathVariable id: String): ModelAndView {
 
     val userInfo = userService.findById(id).toInfo()
     val userArticles = articleService.listByAuthor(id)

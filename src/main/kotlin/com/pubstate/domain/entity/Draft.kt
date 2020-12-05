@@ -5,20 +5,21 @@ import javax.persistence.*
 
 @Entity
 class Draft(
-    var targetId: Long,
+    @ManyToOne(optional = false)
+    val author: User,
+
+    var targetId: String,
 
     var title: String,
 
     @Column(columnDefinition = TEXT_COLUMN_DEF)
     var inputContent: String,
 
-    var formatType: FormatType,
+    var formatType: FormatType
+) : AutoModel() {
 
-    @ManyToOne(optional = false)
-    val author: User) : AutoModel() {
-
-  companion object : BaseFinder<Long, Draft>(Draft::class.java) {
-    fun listByAuthor(authorId: Long): List<Draft> {
+  companion object : BaseFinder<String, Draft>(Draft::class.java) {
+    fun listByAuthor(authorId: String): List<Draft> {
       return query().where()
           .eq("author", User.ref(authorId))
           .findList()

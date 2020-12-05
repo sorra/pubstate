@@ -8,8 +8,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class CommentService {
-  fun create(uid: Long, content: String, targetType: PubType, targetId: Long): Comment {
-    return Comment(content, Ebean.getReference(User::class.java, uid), targetType, targetId).apply {
+
+  fun create(uid: String, content: String, targetType: PubType, targetId: String): Comment {
+    return Comment(
+        author = Ebean.getReference(User::class.java, uid),
+        content = content,
+        targetType = targetType,
+        targetId = targetId).apply {
       save()
     }
   }

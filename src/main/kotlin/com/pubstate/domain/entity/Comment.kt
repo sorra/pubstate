@@ -10,15 +10,15 @@ import javax.persistence.ManyToOne
 
 @Entity
 class Comment(
-    @Column(columnDefinition = TEXT_COLUMN_DEF)
-    val content: String,
-
     @ManyToOne(optional = false)
     var author: User,
 
+    @Column(columnDefinition = TEXT_COLUMN_DEF)
+    val content: String,
+
     val targetType: PubType,
 
-    val targetId: Long
+    val targetId: String
 ) : AutoModel() {
 
   @SoftDelete
@@ -27,9 +27,9 @@ class Comment(
   fun toInfo() = CommentInfo(
       id, whenCreated.orDefault(), content, author.toBrief(), targetType, targetId)
 
-  companion object : BaseFinder<Long, Comment>(Comment::class.java) {
+  companion object : BaseFinder<String, Comment>(Comment::class.java) {
 
-    fun commentsOf(targetType: PubType, targetId: Long,
+    fun commentsOf(targetType: PubType, targetId: String,
                    pageNum: Int, pageSize: Int): PagedList<Comment> {
       return query().where()
           .eq("targetType", targetType)

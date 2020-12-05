@@ -2,6 +2,7 @@ package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.User
 import com.pubstate.exception.DomainException
+import com.pubstate.util.UniqueIdUtil
 import io.ebean.Ebean
 import org.springframework.stereotype.Service
 import java.util.concurrent.locks.ReentrantLock
@@ -14,13 +15,16 @@ class ManageService : HasServices() {
       return
     }
 
+    val user = User(email, password, name)
+    user.id = UniqueIdUtil.one()
+
     if (lock.tryLock()) {
       try {
         Ebean.execute {
           if (inited()) {
             return@execute
           }
-          userAuthService.signup(User(email, password, name))
+          userAuthService.signup(user)
         }
       } finally {
         lock.unlock()
@@ -33,6 +37,6 @@ class ManageService : HasServices() {
   companion object {
     private val lock = ReentrantLock()
 
-    fun inited() = User.byId(1L) != null
+    fun inited() = User.byId(UniqueIdUtil.one()) != null
   }
 }

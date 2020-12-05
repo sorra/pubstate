@@ -24,7 +24,7 @@ class ArticleController : BaseController() {
   fun create(@RequestParam title: String,
              @RequestParam content: String,
              @RequestParam format: String,
-             @RequestParam(required = false) draftId: Long?): String {
+             @RequestParam(required = false) draftId: String?): String {
     val uid = Auth.checkUid()
 
     val article = articleService.create(uid, title, content, format.toEnum())
@@ -33,7 +33,7 @@ class ArticleController : BaseController() {
   }
 
   @GetMapping("/{id}/edit")
-  fun pageForEdit(@PathVariable id: Long,
+  fun pageForEdit(@PathVariable id: String,
                   @RequestParam(defaultValue = MARKDOWN) format: String): ModelAndView {
     Auth.checkUid()
 
@@ -46,11 +46,11 @@ class ArticleController : BaseController() {
 
   @PostMapping("/{id}")
   @ResponseBody
-  fun edit(@PathVariable id: Long,
+  fun edit(@PathVariable id: String,
            @RequestParam title: String,
            @RequestParam content: String,
            @RequestParam format: String,
-           @RequestParam(required = false) draftId: Long?): String {
+           @RequestParam(required = false) draftId: String?): String {
     val uid = Auth.checkUid()
 
     val article = articleService.update(uid, id, title, content, format.toEnum())
@@ -59,7 +59,7 @@ class ArticleController : BaseController() {
   }
 
   @GetMapping("/{id}")
-  fun view(@PathVariable id: Long): ModelAndView {
+  fun view(@PathVariable id: String): ModelAndView {
     val article = articleService.mustGet(id)
 
     return ModelAndView("article")

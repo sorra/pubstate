@@ -4,10 +4,10 @@ import com.pubstate.domain.entity.Article
 
 
 class ArticlePermission(
-    override val userId: Long,
+    override val userId: String,
     override val target: Article) : BasePermission() {
 
-  override val targetId: Long = target.id
+  override val targetId: String = target.id
 
   override fun judge(): Boolean {
     return userId == target.author.id

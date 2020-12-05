@@ -1,11 +1,11 @@
 package com.pubstate.domain.entity
 
-import com.pubstate.util.IdCommons
+import com.pubstate.util.UniqueIdUtil
 import io.ebean.Model
 import io.ebean.annotation.WhenCreated
 import io.ebean.annotation.WhenModified
 import java.sql.Timestamp
-import javax.persistence.GeneratedValue
+import javax.persistence.Column
 import javax.persistence.Id
 import javax.persistence.MappedSuperclass
 import javax.persistence.Version
@@ -16,8 +16,9 @@ import javax.persistence.Version
 @MappedSuperclass
 abstract class AutoModel : Model() {
 
-  @Id @GeneratedValue
-  var id: Long = 0
+  @Id
+  @Column(columnDefinition = "CHAR(22)")
+  var id: String = UniqueIdUtil.newId()
 
   @Version
   var version: Long = 0
@@ -32,7 +33,7 @@ abstract class AutoModel : Model() {
     if (this === other) return true
     if (other?.javaClass != javaClass) return false
     other as AutoModel
-    if (!IdCommons.equal(id, other.id)) return false
+    if (!UniqueIdUtil.equal(id, other.id)) return false
     return true
   }
 

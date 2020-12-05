@@ -1,23 +1,23 @@
 create table article (
-  id                            bigint auto_increment not null,
-  when_created                  datetime(6) not null,
-  when_modified                 datetime(6) not null,
+  id                            char(22) not null,
+  author_id                     char(22) not null,
   title                         varchar(255) not null,
   input_content                 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci not null,
   output_content                TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci not null,
   format_type                   integer not null,
-  author_id                     bigint not null,
-  deleted                       tinyint(1) default 0 not null,
   version                       bigint not null,
+  when_created                  datetime(6) not null,
+  when_modified                 datetime(6) not null,
+  deleted                       tinyint(1) default 0 not null,
   constraint pk_article primary key (id)
 );
 
 create table comment (
-  id                            bigint auto_increment not null,
+  id                            char(22) not null,
+  author_id                     char(22) not null,
   content                       TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci not null,
-  author_id                     bigint not null,
   target_type                   integer not null,
-  target_id                     bigint not null,
+  target_id                     varchar(255) not null,
   version                       bigint not null,
   when_created                  datetime(6) not null,
   when_modified                 datetime(6) not null,
@@ -26,12 +26,12 @@ create table comment (
 );
 
 create table draft (
-  id                            bigint auto_increment not null,
-  target_id                     bigint not null,
+  id                            char(22) not null,
+  author_id                     char(22) not null,
+  target_id                     varchar(255) not null,
   title                         varchar(255) not null,
   input_content                 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci not null,
   format_type                   integer not null,
-  author_id                     bigint not null,
   version                       bigint not null,
   when_created                  datetime(6) not null,
   when_modified                 datetime(6) not null,
@@ -39,10 +39,10 @@ create table draft (
 );
 
 create table file_item (
-  id                            bigint auto_increment not null,
+  id                            char(22) not null,
   name                          varchar(255) not null,
   kind                          varchar(255) not null,
-  owner_id                      bigint not null,
+  owner_id                      varchar(255) not null,
   stored_path                   varchar(255) not null,
   version                       bigint not null,
   when_created                  datetime(6) not null,
@@ -52,7 +52,7 @@ create table file_item (
 
 create table login_pass (
   pass_id                       varchar(255) not null,
-  user_id                       bigint not null,
+  user_id                       varchar(255) not null,
   when_to_expire                datetime(6) not null,
   version                       bigint not null,
   when_created                  datetime(6) not null,
@@ -61,7 +61,7 @@ create table login_pass (
 );
 
 create table user (
-  id                            bigint auto_increment not null,
+  id                            char(22) not null,
   email                         varchar(255) not null,
   password                      varchar(255) not null,
   name                          varchar(255) not null,
@@ -71,6 +71,7 @@ create table user (
   when_created                  datetime(6) not null,
   when_modified                 datetime(6) not null,
   deleted                       tinyint(1) default 0 not null,
+  constraint uq_user_email unique (email),
   constraint pk_user primary key (id)
 );
 

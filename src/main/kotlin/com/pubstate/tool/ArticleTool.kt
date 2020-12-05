@@ -13,7 +13,7 @@ import java.sql.Timestamp
  */
 class ArticleTool {
 
-  fun import(data: String, articleService: ArticleService, assignedId: Long? = null) {
+  fun import(data: String, articleService: ArticleService, assignedId: String? = null) {
     ObjectMapper().readValue(data, ArticleInfo::class.java).run {
       val ar = Article(
           title = title,
@@ -51,13 +51,13 @@ class ArticleTool {
 
   @KotlinNoArg
   data class ArticleInfo(
-      var id: Long?,
+      var id: String?,
       var version: Long?,
       var whenCreated: Timestamp?,
       var whenModified: Timestamp?,
       var title: String,
       var inputContent: String,
       var formatType: FormatType,
-      var authorId: Long
+      var authorId: String
   )
 }

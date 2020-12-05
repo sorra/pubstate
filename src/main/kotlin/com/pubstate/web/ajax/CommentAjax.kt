@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 class CommentAjax : BaseController() {
 
   @GetMapping
-  fun commentsOf(@RequestParam targetType: String, @RequestParam targetId: Long): Map<String, *> {
+  fun commentsOf(@RequestParam targetType: String, @RequestParam targetId: String): Map<String, *> {
 //    val page = Comment.commentsOf(targetType.toEnum(), targetId, pageNum(), pageSize())
 
 //    return mapOf(
@@ -22,7 +22,7 @@ class CommentAjax : BaseController() {
 
   @PostMapping
   fun create(@RequestParam content: String,
-             @RequestParam targetType: String, @RequestParam targetId: Long) {
+             @RequestParam targetType: String, @RequestParam targetId: String) {
     val uid = Auth.checkUid()
 
     commentService.create(uid, content, targetType.toEnum(), targetId)

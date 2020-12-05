@@ -6,9 +6,9 @@ import java.util.*
 
 @KotlinNoArg
 data class CommentInfo(
-    var id: Long,
+    var id: String,
     var whenCreated: Date,
     var content: String,
     var author: UserBrief,
     var targetType: PubType,
-    var targetId: Long)
+    var targetId: String)

@@ -6,10 +6,10 @@ import javax.persistence.Entity
 class FileItem(
     var name: String,
     var kind: String,
-    var ownerId: Long,
+    var ownerId: String,
     /** just for information */
     var storedPath: String
 ) : AutoModel() {
 
-  companion object : BaseFinder<Long, FileItem>(FileItem::class.java)
+  companion object : BaseFinder<String, FileItem>(FileItem::class.java)
 }

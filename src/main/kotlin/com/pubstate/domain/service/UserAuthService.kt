@@ -19,7 +19,7 @@ class UserAuthService {
     }
   }
 
-  fun signup(user: User): Long {
+  fun signup(user: User): String {
     if (User.byEmail(user.email) != null) {
       throw DomainException("Signup failed: email %s is already used", user.email)
     }
@@ -33,7 +33,7 @@ class UserAuthService {
     return user.id
   }
 
-  fun updatePassword(userId: Long, oldPassword: String, newPassword: String): Boolean {
+  fun updatePassword(userId: String, oldPassword: String, newPassword: String): Boolean {
     val user = User.mustGet(userId)
     if (checkPassword(oldPassword, user.password)) {
       user.password = encryptPassword(newPassword)
@@ -44,7 +44,7 @@ class UserAuthService {
     }
   }
 
-  fun resetPassword(userId: Long, newPassword: String) {
+  fun resetPassword(userId: String, newPassword: String) {
     val user = User.mustGet(userId)
     user.password = encryptPassword(newPassword)
     user.update()
