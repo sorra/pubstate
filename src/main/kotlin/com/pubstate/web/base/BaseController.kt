@@ -52,10 +52,12 @@ abstract class BaseController : HasServices() {
       sb.append("<a href=\"${uri}?pageNum=${curpageNum -1}\">Previous Page</a>")
     }
     for (i in 1..pagesCount) {
-      val attrs =
-          if (i == curpageNum) "class=\"page-link current-page-link\""
-          else "class=\"page-link\" href=\"${uri}?pageNum=${i}\""
-      sb.append('\n').append("<a ${attrs}>${i}</a>")
+      sb.append('\n')
+      if (i == curpageNum) {
+        sb.append("<span>${i}</span>")
+      } else {
+        sb.append("<a href=\"${uri}?pageNum=${i}\">${i}</a>")
+      }
     }
     if (curpageNum < pagesCount) {
       sb.append("\n<a href=\"${uri}?pageNum=${curpageNum +1}\">Next Page</a>")

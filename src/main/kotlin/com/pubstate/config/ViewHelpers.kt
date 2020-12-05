@@ -64,9 +64,9 @@ object ViewHelpers {
         return DateTimeFormatter.ofPattern("HH:mm").withZone().format(thatTime)
       }
       if (LocalDate.now().year == thatDay.year) { // In this year
-        return DateTimeFormatter.ofPattern("MM/dd HH:mm").withZone().format(thatTime)
+        return DateTimeFormatter.ofPattern("MM-dd HH:mm").withZone().format(thatTime)
       }
-      return DateTimeFormatter.ofPattern("yyyy MM/dd HH:mm").withZone().format(thatTime)
+      return DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone().format(thatTime)
     }
 
     //TODO application property can override system time zone
