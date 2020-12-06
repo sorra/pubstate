@@ -10,8 +10,9 @@ block mainContent
       +userLabel(article.author)
       span &nbsp;Created at&nbsp;
       +humanTimeLabel(article.whenCreated)
-      span &nbsp;Modified at&nbsp;
-      +humanTimeLabel(article.whenModified)
+      if article.whenCreated != article.whenModified
+        span &nbsp;Modified at&nbsp;
+        +humanTimeLabel(article.whenModified)
       if article.author.id == userSelf.id
         a(href="/articles/#{article.id}/edit") Edit
     div!= article.outputContent
