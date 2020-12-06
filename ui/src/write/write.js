@@ -141,8 +141,7 @@ class Write {
       }
 
       $.post("/drafts/save", payload)
-        .done(resp => {
-          let respDraftId = parseInt(resp)
+        .done(respDraftId => {
           if (respDraftId) {
             this.draftId = respDraftId
             savedDraft = liveData
