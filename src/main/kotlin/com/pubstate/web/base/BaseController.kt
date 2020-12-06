@@ -1,5 +1,6 @@
 package com.pubstate.web.base
 
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.domain.service.HasServices
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
@@ -47,9 +48,13 @@ abstract class BaseController : HasServices() {
           .addObject("paginationLinks", paginationLinks("/$listName", pagesCount, pageNum))
 
   private fun paginationLinks(uri: String, pagesCount: Int, curpageNum: Int): String {
+    if (pagesCount <= 1) {
+      return ""
+    }
+
     val sb = StringBuilder()
     if (curpageNum > 1) {
-      sb.append("<a href=\"${uri}?pageNum=${curpageNum -1}\">Previous Page</a>")
+      sb.append("<a href=\"${uri}?pageNum=${curpageNum -1}\">${MessageBundle.getMessage("ui_previous_page")}</a>")
     }
     for (i in 1..pagesCount) {
       sb.append('\n')
@@ -60,7 +65,7 @@ abstract class BaseController : HasServices() {
       }
     }
     if (curpageNum < pagesCount) {
-      sb.append("\n<a href=\"${uri}?pageNum=${curpageNum +1}\">Next Page</a>")
+      sb.append("\n<a href=\"${uri}?pageNum=${curpageNum +1}\">${MessageBundle.getMessage("ui_next_page")}</a>")
     }
     return sb.toString()
   }

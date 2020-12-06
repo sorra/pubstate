@@ -1,7 +1,7 @@
 extends layout.jade
 
 block customHeader
-  title Login
+  title=i18n.getMessage("ui_login")
   style.
     .heading{
       text-align: center;
@@ -11,22 +11,22 @@ block customHeader
 
 block mainContent
   if goto
-    #message_box.alert.alert-danger Login is required.
+    #message_box.alert.alert-danger=i18n.getMessage("ui_login_required")
   form.auth_form(action="/login", method="post")
-    h3.heading Login
+    h3.heading=i18n.getMessage("ui_login")
     .input-group
-      label(for="email") Email
+      label(for="email")=i18n.getMessage("ui_email")
       input#email(name="email", type="text")
     .input-group
-      label(for="password") Password
+      label(for="password")=i18n.getMessage("ui_password")
       input#password(name="password", type="password")
     .input-group
       label(for="remember_me", title="Attention: don't enable this on public computers", data-toggle="tooltip")
         input#remember_me(name="rememberMe", type="checkbox", checked="")
-        |  Remember me
+        |  #{i18n.getMessage("ui_remember_me")}
     .auth_acts.input-group
       button.btn.btn-block.btn-lg.btn-danger(type="submit")
         span.small-circle
           i.fa.fa-caret-right
-        small Login
-      a.btn(href="/signup") Create new account
+        small=i18n.getMessage("ui_login")
+      a.btn(href="/signup")=i18n.getMessage("ui_create_account")

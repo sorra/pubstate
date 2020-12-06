@@ -2,7 +2,7 @@ nav#topnav.navbar.navbar-default.navbar-inverse(role="navigation")
   #topnav-content.container-fluid
     .navbar-header
       button.navbar-toggle(type="button", data-toggle="collapse", data-target="#topnav-collapse")
-        span.sr-only Toggle navigation
+        span.sr-only=i18n.getMessage("ui_toggle_navigation")
         span.icon-bar
         span.icon-bar
         span.icon-bar
@@ -16,7 +16,7 @@ nav#topnav.navbar.navbar-default.navbar-inverse(role="navigation")
         //- li
         //-   a#topnav-tags(href="javascript:;") Tags
         li
-          a(href="/articles") Articles
+          a(href="/articles")=i18n.getMessage("ui_articles")
         li
           a.glyphicon.glyphicon-pencil(href="/articles/new", title="Write")
         if userSelf != null
@@ -28,15 +28,15 @@ nav#topnav.navbar.navbar-default.navbar-inverse(role="navigation")
                 span.glyphicon.glyphicon-cog(title="Menu")
               ul.dropdown-menu(aria-labelledby="user_dropdown_menu")
                 li
-                  a(href="/drafts") Drafts
+                  a(href="/drafts")=i18n.getMessage("ui_drafts")
                 li
-                  a(href="/trash") Trash
+                  a(href="/trash")=i18n.getMessage("ui_trash")
                 li
-                  a(href="/profile") Profile
+                  a(href="/profile")=i18n.getMessage("ui_myself")
                 li
-                  a(href="/logout") Logout
+                  a(href="/logout")=i18n.getMessage("ui_logout")
         else
           li
-            a#topnav-login(href="/login") Login
+            a#topnav-login(href="/login")=i18n.getMessage("ui_login")
           li
-            a#topnav-signup(href="/signup") Signup
+            a#topnav-signup(href="/signup")=i18n.getMessage("ui_signup")

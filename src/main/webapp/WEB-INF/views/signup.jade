@@ -1,7 +1,7 @@
 extends layout.jade
 
 block customHeader
-  title Signup
+  title=i18n.getMessage("ui_signup")
   style.
     .heading {
       text-align: center;
@@ -11,22 +11,22 @@ block customHeader
 
 block mainContent
   form.auth_form(action="/signup", method="post")
-    h3.heading Signup
+    h3.heading=i18n.getMessage("ui_signup")
     .input-group
-      label(for="email") Email
+      label(for="email")=i18n.getMessage("ui_email")
       input#email(name="email", type="text")
     .input-group
-      label(for="name") Name
+      label(for="name")=i18n.getMessage("ui_name")
       input#name(name="name", type="text")
     .input-group
-      label(for="password") Password
+      label(for="password")=i18n.getMessage("ui_password")
       input#password(name="password", type="password")
     .input-group
-      label(for="repeat_password") Repeat password
+      label(for="repeat_password")=i18n.getMessage("ui_repeat_password")
       input#repeat_password(name="repeatPassword", type="password")
     .auth_acts.input-group
       button.btn.btn-block.btn-lg.btn-danger(type="submit")
         span.small-circle
           i.fa.fa-caret-right
-        small Signup
-      a.btn(href="/login") Login with an existing account
+        small=i18n.getMessage("ui_signup")
+      a.btn(href="/login")=i18n.getMessage("ui_login_account")

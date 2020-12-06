@@ -1,31 +1,31 @@
 extends layout.jade
 
 block customHeader
-  title User Profile
+  title=i18n.getMessage("ui_user_profile")
 
 block mainContent
   div
     div
       img#user-avatar(src="#{cdn}/files/avatar/#{user.avatar}")
-      a(href="/profile/avatar") Change avatar
+      a(href="/profile/avatar")=i18n.getMessage("ui_change_avatar")
     div#user-name-control
-      label Name:
+      label #{i18n.getMessage("ui_name")}:
       span.display-bar
         span.display-value= user.name
-        a.edit-btn(href="javascript:;") Edit
+        a.edit-btn(href="javascript:;")=i18n.getMessage("ui_edit")
       span.edit-bar(style="display:none")
-        input.input-el(name='name')
-        button.confirm-btn Confirm
-        button.cancel-btn Cancel
+        input.input-el(name="name")
+        button.confirm-btn=i18n.getMessage("ui_confirm")
+        button.cancel-btn=i18n.getMessage("ui_cancel")
     div#user-intro-control
-      label Introduction:
+      label #{i18n.getMessage("ui_introduction")}:
       span.display-bar
         span.display-value= user.intro
-        a.edit-btn(href="javascript:;") Edit
+        a.edit-btn(href="javascript:;")=i18n.getMessage("ui_edit")
       span.edit-bar(style="display:none")
-        input.input-el(name='intro')
-        button.confirm-btn Confirm
-        button.cancel-btn Cancel
+        input.input-el(name="intro")
+        button.confirm-btn=i18n.getMessage("ui_confirm")
+        button.cancel-btn=i18n.getMessage("ui_cancel")
 
 block customFooter
   script.

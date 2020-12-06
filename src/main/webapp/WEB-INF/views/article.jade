@@ -8,11 +8,11 @@ block mainContent
     h1= article.title
     div
       +userLabel(article.author)
-      span &nbsp;Created at&nbsp;
+      span &nbsp;#{i18n.getMessage("ui_created_at")}&nbsp;
       +humanTimeLabel(article.whenCreated)
       if article.whenCreated != article.whenModified
-        span &nbsp;Modified at&nbsp;
+        span &nbsp;#{i18n.getMessage("ui_modified_at")}&nbsp;
         +humanTimeLabel(article.whenModified)
       if article.author.id == userSelf.id
-        a(href="/articles/#{article.id}/edit") Edit
+        a(href="/articles/#{article.id}/edit")=i18n.getMessage("ui_edit")
     div!= article.outputContent

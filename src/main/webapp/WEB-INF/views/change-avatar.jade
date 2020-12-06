@@ -1,7 +1,7 @@
 extends layout.jade
 
 block customHeader
-  title Change Avatar
+  title=i18n.getMessage("ui_change_avatar")
   style.
     .color-picker input {
       opacity: 0.5;
@@ -22,7 +22,7 @@ block customHeader
 block mainContent
   form#avatar-form(action="/profile/avatar" method="post" enctype="multipart/form-data")
     #avatar-uploader
-      label Upload an image, or pick a color avatar, otherwise a random color will be assigned
+      label=i18n.getMessage("ui_avatar_tip")
       input(name="avatar" type="file")
       input(type="submit")
       br

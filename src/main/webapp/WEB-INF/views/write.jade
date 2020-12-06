@@ -1,7 +1,7 @@
 extends layout.jade
 //- article?, draftId?, format?
 block customHeader
-  title Write Article
+  title=i18n.getMessage("ui_write_article")
   +libCss(['simplemde.min'])
   style.
     #article {
@@ -45,7 +45,7 @@ block mainContent
         | !{article.inputContent}
     #submitter-wrapper
       // tag-input
-    button.btn-submit.btn.btn-primary.pull-right(type='submit') Publish
+    button.btn-submit.btn.btn-primary.pull-right(type='submit')=i18n.getMessage("ui_publish")
 
 block customFooter
     #switch-editor-dialog.modal.fade(tabindex='-1', role='dialog')
@@ -56,7 +56,7 @@ block customFooter
             h4.modal-title Switch the editor? (Current inputs won't be saved)
           .modal-footer
             button.sure-btn.btn.btn-primary(type='button') Switch
-            button.btn.btn-default(type='button', data-dismiss='modal') Cancel
+            button.btn.btn-default(type='button', data-dismiss='modal')=i18n.getMessage("ui_cancel")
 
     - var editorLibName = (format == 'MARKDOWN') ? 'simplemde.min' : 'tinymce/tinymce.min'
     +libJs([editorLibName])

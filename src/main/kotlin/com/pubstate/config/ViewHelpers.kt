@@ -1,5 +1,6 @@
 package com.pubstate.config
 
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.util.Settings
 import java.time.Instant
 import java.time.LocalDate
@@ -17,12 +18,14 @@ object ViewHelpers {
     val helpers = mutableMapOf(
         "cdn" to cdn,
         "Resources" to Resources(isDevMode),
+        "i18n" to MessageBundle,
         "HumanTime" to HumanTime()
     )
 
     return Collections.unmodifiableMap(helpers)
   }
 
+  @Suppress("unused")
   class Resources(private val isDevMode: Boolean) {
     fun convertLibNames(names: Array<String>, suffix: String): List<String> {
       return names.map { name ->

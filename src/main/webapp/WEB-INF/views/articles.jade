@@ -1,7 +1,7 @@
 extends layout.jade
 
 block customHeader
-  title Articles
+  title=i18n.getMessage("ui_articles")
 
 block mainContent
   +articlesList(articles)

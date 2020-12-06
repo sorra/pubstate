@@ -1,14 +1,14 @@
 extends layout.jade
 
 block mainContent
-  h1 Drafts
+  h1=i18n.getMessage("ui_drafts")
   ul#drafts
     for draft in drafts
       li
         a(href="/drafts/#{draft.id}")= draft.title.isEmpty() ? '(No title)' : draft.title
-        span &nbsp;Last update at&nbsp;
+        span &nbsp;#{i18n.getMessage("ui_modified_at")}&nbsp;
         +humanTimeLabel(draft.whenModified)
-        button.delete-btn(data-id=draft.id) Delete
+        button.delete-btn(data-id=draft.id)=i18n.getMessage("ui_delete")
 
 block customFooter
   script.
