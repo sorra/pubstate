@@ -21,10 +21,9 @@ public final class UniqueIdUtil {
 
   public static String one() {
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < 21; i++) {
-      sb.append('0');
+    for (int i = 0; i < 22; i++) {
+      sb.append('A');
     }
-    sb.append('1');
     return sb.toString();
   }
 
