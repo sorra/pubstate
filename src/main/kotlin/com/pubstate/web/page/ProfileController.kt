@@ -1,6 +1,7 @@
 package com.pubstate.web.page
 
 import com.pubstate.domain.enum.Folder
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.BadArgumentException
 import com.pubstate.web.base.BaseController
 import org.slf4j.Logger
@@ -30,7 +31,7 @@ class ProfileController : BaseController() {
     val updatedAttrs = mutableListOf<String>()
     if (name != null) {
       if (name.isBlank()) {
-        throw BadArgumentException("name should not be blank")
+        throw BadArgumentException(MessageBundle.getMessage("user_name_blank"))
       }
       currentUser.name = name
       updatedAttrs += "name"
@@ -69,7 +70,7 @@ class ProfileController : BaseController() {
         currentUser.avatar = "color${color}.png"
       }
       else -> {
-        throw BadArgumentException("Please upload an avatar or pick a color")
+        throw BadArgumentException(MessageBundle.getMessage("avatar_not_set"))
       }
     }
     currentUser.update()

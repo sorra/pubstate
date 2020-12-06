@@ -1,6 +1,7 @@
 package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.User
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
 import com.pubstate.util.UniqueIdUtil
 import org.jasypt.util.password.StrongPasswordEncryptor
@@ -17,17 +18,17 @@ class UserAuthService {
     if (user != null && checkPassword(password, user.password)) {
       return user
     } else {
-      throw DomainException("Login failed: incorrect email or password")
+      throw DomainException(MessageBundle.getMessage("login_credential_incorrect"))
     }
   }
 
   fun signup(user: User): String {
     if (!isSystemInitialized() && user.id != UniqueIdUtil.one()) {
-      throw DomainException("First time to run the system, need to initialize")
+      throw DomainException(MessageBundle.getMessage("first_time_need_to_init"))
     }
 
     if (User.byEmail(user.email) != null) {
-      throw DomainException("Signup failed: email %s is already used", user.email)
+      throw DomainException(MessageBundle.getMessage("signup_email_taken", arrayOf(user.email)))
     }
 
     user.password = encryptPassword(user.password)

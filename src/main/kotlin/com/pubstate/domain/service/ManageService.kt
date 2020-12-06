@@ -1,6 +1,7 @@
 package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.User
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
 import com.pubstate.util.UniqueIdUtil
 import io.ebean.Ebean
@@ -30,7 +31,7 @@ class ManageService : HasServices() {
         lock.unlock()
       }
     } else {
-      throw DomainException("Cannot acquire lock for init!")
+      throw DomainException(MessageBundle.getMessage("init_lock_failed"))
     }
   }
   

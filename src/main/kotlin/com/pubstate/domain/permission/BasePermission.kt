@@ -1,5 +1,6 @@
 package com.pubstate.domain.permission
 
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.PermissionDeniedException
 
 abstract class BasePermission {
@@ -10,16 +11,19 @@ abstract class BasePermission {
   protected abstract fun judge(): Boolean
 
   fun canEdit() {
-    can(judge(), "edit")
+    can(judge(), "action_edit")
   }
 
   fun canDelete() {
-    can(judge(), "delete")
+    can(judge(), "action_delete")
   }
 
-  private fun can(checkResult: Boolean, action: String) {
+  private fun can(checkResult: Boolean, actionCode: String) {
     if (!checkResult) {
-      throw PermissionDeniedException("User[$userId] is not permitted to $action ${target.javaClass.simpleName}[$targetId]")
+      val action = MessageBundle.getMessage(actionCode)
+      val target = "${target.javaClass.simpleName}[$targetId]"
+      val message = MessageBundle.getMessage("permission_denied", arrayOf(userId, action, target))
+      throw PermissionDeniedException(message)
     }
   }
 }

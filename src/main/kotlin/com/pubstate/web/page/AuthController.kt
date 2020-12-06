@@ -1,6 +1,7 @@
 package com.pubstate.web.page
 
 import com.pubstate.domain.entity.User
+import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.BadArgumentException
 import com.pubstate.exception.DomainException
 import com.pubstate.web.auth.Auth
@@ -35,7 +36,7 @@ class AuthController : BaseController() {
             @RequestParam password: String,
             @RequestParam(defaultValue = "false") rememberMe: Boolean): String {
     if (email.isEmpty() || password.isEmpty()) {
-      throw DomainException("Empty input!")
+      throw DomainException(MessageBundle.getMessage("login_credential_empty"))
     }
 
     logger.info("Trying login email: {}", email)
@@ -70,25 +71,25 @@ class AuthController : BaseController() {
     logger.info("Try to signup with email: {}", email)
 
     if (email.length > 50) {
-      throw EMAIL_TOO_LONG
+      throw BadArgumentException(MessageBundle.getMessage("email_too_long"))
     }
     val idxOfAt = email.indexOf('@')
     if (idxOfAt <= 0 || email.indexOf('.', idxOfAt) <= 0) {
-      throw EMAIL_WRONG_FORMAT
+      throw BadArgumentException(MessageBundle.getMessage("email_invalid_format"))
     }
 
     if (password.length < 8) {
-      throw PASSWORD_TOO_SHORT
+      throw BadArgumentException(MessageBundle.getMessage("password_too_short"))
     }
     if (password.length > 20) {
       if (password.contains(",")) {
         logger.error("Password contains ',' , is it a UI coding bug?")
       }
-      throw PASSWORD_TOO_LONG
+      throw BadArgumentException(MessageBundle.getMessage("password_too_long"))
     }
 
     if (repeatPassword != password) {
-      throw REPEAT_PASSWORD_NOT_MATCH
+      throw BadArgumentException(MessageBundle.getMessage("repeat_password_mismatch"))
     }
 
     userAuthService.signup(User(email, password, name))
@@ -107,11 +108,5 @@ class AuthController : BaseController() {
 
   companion object {
     val logger: Logger = LoggerFactory.getLogger(AuthController::class.java)
-
-    private val EMAIL_TOO_LONG = BadArgumentException("Email should be no longer than 50 characters")
-    private val EMAIL_WRONG_FORMAT = BadArgumentException("Invalid email format")
-    private val PASSWORD_TOO_SHORT = BadArgumentException("Password is too short (should be 8-20 characters)")
-    private val PASSWORD_TOO_LONG = BadArgumentException("Password is too long (should be 8-20 characters)")
-    private val REPEAT_PASSWORD_NOT_MATCH = BadArgumentException("Two entered passwords are different")
   }
 }
