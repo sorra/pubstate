@@ -13,9 +13,8 @@ class UserAuthService {
 
   fun checkLogin(email: String, password: String): User {
     val user = User.byEmail(email)
-        ?: throw DomainException("Login failed: no matching user for email: %s", email)
 
-    if (checkPassword(password, user.password)) {
+    if (user != null && checkPassword(password, user.password)) {
       return user
     } else {
       throw DomainException("Login failed: incorrect email or password")
