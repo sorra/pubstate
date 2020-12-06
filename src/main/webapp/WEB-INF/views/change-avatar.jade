@@ -26,11 +26,11 @@ block mainContent
       input(name="avatar" type="file")
       input(type="submit")
       br
-      img(src="#{cdn}/files/avatar/#{user.avatar}")
+      img(src="#{cdn}/images/#{user.avatar}")
     #color-avatars
       #color-avatars-label Color avatars:
       for i in [1,2,3,4,5,6,7]
         label.color-picker
           input(name="color" value=i type="radio")
-          img(src="#{cdn}/files/avatar/color#{i}.png")
+          img(src="#{cdn}/images/color#{i}.png")
       input(name="colorAvatar" type="text" style="display:none")

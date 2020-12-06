@@ -1,6 +1,5 @@
 package com.pubstate.web.ajax
 
-import com.pubstate.domain.enum.Folder
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
 import com.pubstate.web.auth.Auth
@@ -23,10 +22,10 @@ class UploadAjaxController : BaseController() {
   fun uploadImage(file: MultipartFile, response: HttpServletResponse): Map<String, String> {
     val uid = Auth.checkUid()
 
-    log.info("Uploading image: uid={}, filename={}", uid, file.name)
+    log.info("Uploading image: userId={}, filename={}", uid, file.name)
 
     try {
-      val link = fileService.upload(uid, file, Folder.IMAGE)
+      val link = imageService.upload(uid, file, isAvatar = false)
       return mapOf("location" to link)
     } catch (e: IOException) {
       throw DomainException(MessageBundle.getMessage("image_upload_failed"), e)

@@ -17,5 +17,5 @@ abstract class HasServices {
   protected lateinit var commentService: CommentService
 
   @Autowired
-  protected lateinit var fileService: FileService
+  protected lateinit var imageService: ImageService
 }

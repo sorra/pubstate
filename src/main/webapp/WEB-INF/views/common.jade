@@ -38,7 +38,7 @@ mixin footer
 mixin userLabel(user)
   span.user-label(data-id=user.id)
     a.user-avatar(href="/users/#{user.id}")
-      img(src="#{cdn}/files/avatar/#{user.avatar}")
+      img(src="#{cdn}/images/#{user.avatar}")
     a.user-name(href="/users/#{user.id}")= user.name
 
 mixin humanTimeLabel(dt)

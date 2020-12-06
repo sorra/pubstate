@@ -1,8 +1,8 @@
 package com.pubstate.domain.service
 
-import com.pubstate.domain.entity.FileItem
-import com.pubstate.domain.enum.Folder
-import com.pubstate.domain.permission.FileItemPermission
+import com.pubstate.domain.entity.Image
+import com.pubstate.domain.entity.User
+import com.pubstate.domain.permission.ImagePermission
 import com.pubstate.util.Settings
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -12,41 +12,38 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
-import java.util.*
 
 @Service
-class FileService {
+class ImageService {
 
   /**
    * @return file name
    */
   @Throws(IOException::class)
-  fun upload(userId: String, file: MultipartFile, folder: Folder): String {
-    val fm = findFolderManager(folder)
-    return saveFile(userId, fm, folder, file)
+  fun upload(userId: String, file: MultipartFile, isAvatar: Boolean): String {
+    return saveFile(userId, file, isAvatar)
   }
 
   @Throws(IOException::class)
-  fun multiUpload(userId: String, files: Array<MultipartFile>, folder: Folder): Collection<String> {
-    val fm = findFolderManager(folder)
+  fun multiUpload(userId: String, files: Array<MultipartFile>, isAvatar: Boolean): Collection<String> {
     return files.map { file ->
-      saveFile(userId, fm, folder, file)
+      saveFile(userId, file, isAvatar)
     }
   }
 
-  fun delete(userId: String, fileId: String) {
-    val fileItem = FileItem.byId(fileId)
+  fun delete(userId: String, id: String) {
+    val image = Image.byId(id)
         ?: return
 
-    FileItemPermission(userId, fileItem).canDelete()
-    fileItem.delete()
+    ImagePermission(userId, image).canDelete()
+    image.delete()
   }
 
   /**
    * @return file name
    */
   @Throws(IOException::class)
-  private fun saveFile(ownerId: String, fm: FolderManager, folder: Folder, file: MultipartFile): String {
+  private fun saveFile(ownerId: String, file: MultipartFile, isAvatar: Boolean): String {
     if (file.size == 0L) {
       throw IllegalArgumentException("Rejected: file is empty!")
     }
@@ -54,13 +51,14 @@ class FileService {
       throw IllegalArgumentException("Rejected: allowed max file size is ${MAX_BYTES}MB!")
     }
 
-    // Restrict file suffix, in order to prevent XSS attack
-    val fileName = UUID.randomUUID().toString() + SUFFIX
-    val filePath = Paths.get(fm.dir.path, fileName)
+    val image = Image(User.ref(ownerId), isAvatar)
 
-    Files.write(filePath, file.bytes, StandardOpenOption.CREATE_NEW)
-    FileItem(fileName, folder.name, ownerId, filePath.toString()).save()
-    log.info("File saved: {}", filePath)
+    // Restrict file suffix, in order to prevent XSS attack
+    val fileName = image.id + SUFFIX
+    Files.write(Paths.get(folderPath(), fileName), file.bytes, StandardOpenOption.CREATE_NEW)
+    log.info("Saved image: {}, original name: {}", fileName, file.name)
+
+    image.save()
 
     return fileName
   }
@@ -89,10 +87,9 @@ class FileService {
   companion object {
     private const val MAX_MBS = 4L
     private const val MAX_BYTES = MAX_MBS * 1024 * 1024
-    // Only for trial
     private const val SUFFIX = ".jpg"
 
-    private val log = LoggerFactory.getLogger(FileService::class.java)
+    private val log = LoggerFactory.getLogger(ImageService::class.java)
 
     private val FILESTORE_ROOT = {
       val value = Settings.getProperty("filestore.root")
@@ -107,18 +104,8 @@ class FileService {
 
     private fun userHome() = System.getProperty("user.home")
 
-    private val folderManagers: Map<Folder, FolderManager> = {
-      val map: MutableMap<Folder, FolderManager> = EnumMap(Folder::class.java)
-      for (key in Folder.values()) {
-        map[key] = FolderManager(key.folderName)
-      }
-      map
-    }()
+    private val folderManager = FolderManager("images")
 
-    private fun findFolderManager(folder: Folder): FolderManager {
-      return folderManagers[folder] ?: error("No manager for the folder: " + folder)
-    }
-
-    fun folderFilePath(folder: Folder): String = findFolderManager(folder).dir.path
+    fun folderPath(): String = folderManager.dir.path
   }
 }

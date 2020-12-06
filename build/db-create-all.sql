@@ -38,16 +38,15 @@ create table draft (
   constraint pk_draft primary key (id)
 );
 
-create table file_item (
+create table image (
   id                            char(22) not null,
-  name                          varchar(255) not null,
-  kind                          varchar(255) not null,
-  owner_id                      varchar(255) not null,
-  stored_path                   varchar(255) not null,
+  owner_id                      char(22) not null,
+  is_avatar                     tinyint(1) default 0 not null,
   version                       bigint not null,
   when_created                  datetime(6) not null,
   when_modified                 datetime(6) not null,
-  constraint pk_file_item primary key (id)
+  deleted                       tinyint(1) default 0 not null,
+  constraint pk_image primary key (id)
 );
 
 create table login_pass (
@@ -83,4 +82,7 @@ alter table comment add constraint fk_comment_author_id foreign key (author_id) 
 
 create index ix_draft_author_id on draft (author_id);
 alter table draft add constraint fk_draft_author_id foreign key (author_id) references user (id) on delete restrict on update restrict;
+
+create index ix_image_owner_id on image (owner_id);
+alter table image add constraint fk_image_owner_id foreign key (owner_id) references user (id) on delete restrict on update restrict;
 

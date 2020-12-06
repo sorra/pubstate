@@ -1,6 +1,6 @@
 package com.pubstate.web.page.manage
 
-import com.pubstate.domain.entity.FileItem
+import com.pubstate.domain.entity.Image
 import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +16,7 @@ class ManageFilesController : BaseController() {
     val pageNum = pageNum()
     val pageSize = pageSize()
 
-    val (files, totalPagesCount) = FileItem.findPageDescWithTotalPagesCount(pageNum, pageSize)
+    val (files, totalPagesCount) = Image.findPageDescWithTotalPagesCount(pageNum, pageSize)
 
     return pagedModelAndView("manage-files", "files", files, totalPagesCount, pageNum)
   }

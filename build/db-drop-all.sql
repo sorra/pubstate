@@ -7,13 +7,16 @@ drop index ix_comment_author_id on comment;
 alter table draft drop foreign key fk_draft_author_id;
 drop index ix_draft_author_id on draft;
 
+alter table image drop foreign key fk_image_owner_id;
+drop index ix_image_owner_id on image;
+
 drop table if exists article;
 
 drop table if exists comment;
 
 drop table if exists draft;
 
-drop table if exists file_item;
+drop table if exists image;
 
 drop table if exists login_pass;
 

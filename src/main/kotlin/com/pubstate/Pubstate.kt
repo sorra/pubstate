@@ -1,7 +1,6 @@
 package com.pubstate
 
-import com.pubstate.domain.enum.Folder
-import com.pubstate.domain.service.FileService
+import com.pubstate.domain.service.ImageService
 import com.pubstate.web.base.PageDefaultModelInterceptor
 import com.pubstate.web.filter.AccessLoggingFilter
 import com.pubstate.web.filter.AuthFilter
@@ -27,10 +26,8 @@ class PubState : WebMvcConfigurer {
     registry.addResourceHandler("/static/**")
         .addResourceLocations("/static/")
 
-    for (folder in Folder.values()) {
-      registry.addResourceHandler("/files/${folder.folderName}/**")
-          .addResourceLocations(fileUrl(FileService.folderFilePath(folder)))
-    }
+    registry.addResourceHandler("/images/**")
+        .addResourceLocations(fileUrl(ImageService.folderPath()))
   }
 
   private fun fileUrl(path: String): String {

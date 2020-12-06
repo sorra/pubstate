@@ -6,7 +6,7 @@ block customHeader
 block mainContent
   div
     div
-      img#user-avatar(src="#{cdn}/files/avatar/#{user.avatar}")
+      img#user-avatar(src="#{cdn}/images/#{user.avatar}")
       a(href="/profile/avatar")=i18n.getMessage("ui_change_avatar")
     div#user-name-control
       label #{i18n.getMessage("ui_name")}:

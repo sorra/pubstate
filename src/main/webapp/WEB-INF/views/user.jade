@@ -6,7 +6,7 @@ block customHeader
 block mainContent
   div
     a.user-avatar(href="/users/#{user.id}")
-      img(src="#{cdn}/files/avatar/#{user.avatar}")
+      img(src="#{cdn}/images/#{user.avatar}")
     a.user-name(href="/users/#{user.id}")= user.name
     span= user.intro
     +articlesList(articles)

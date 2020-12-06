@@ -1,6 +1,5 @@
 package com.pubstate.web.page
 
-import com.pubstate.domain.enum.Folder
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.BadArgumentException
 import com.pubstate.web.base.BaseController
@@ -63,7 +62,7 @@ class ProfileController : BaseController() {
 
     when {
       avatar != null && !avatar.isEmpty -> {
-        val fileName = fileService.upload(currentUser.id, avatar, Folder.AVATAR)
+        val fileName = imageService.upload(currentUser.id, avatar, isAvatar = true)
         currentUser.avatar = fileName
       }
       color != null && color.isNotBlank() -> {
