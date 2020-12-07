@@ -1,14 +1,14 @@
 create table article (
   id                            char(22) not null,
+  when_created                  datetime(6) not null,
+  when_modified                 datetime(6) not null,
   author_id                     char(22) not null,
   title                         varchar(255) not null,
   input_content                 TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci not null,
   output_content                TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci not null,
   format_type                   integer not null,
-  version                       bigint not null,
-  when_created                  datetime(6) not null,
-  when_modified                 datetime(6) not null,
   deleted                       tinyint(1) default 0 not null,
+  version                       bigint not null,
   constraint pk_article primary key (id)
 );
 

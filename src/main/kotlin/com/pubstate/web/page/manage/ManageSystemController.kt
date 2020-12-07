@@ -40,14 +40,21 @@ class ManageSystemController(
       return "Folder doesn't exist"
     }
 
+    val batchFileName = "articles.json"
+
     var count = 0
     folder.listFiles()!!
-        .filter { it.name.endsWith(".json") }
-        .sortedBy { it.name.removeSuffix(".json").toLong() }
+        .filter { it.name.endsWith(".json") && it.name != batchFileName }
         .forEach {
           count++
           ArticleTool().import(it.readText(), articleService)
         }
+    if (count == 0) {
+      val batchFile = folder.resolve(batchFileName)
+      if (batchFile.exists()) {
+        count = ArticleTool().importBatch(batchFile.readText(), articleService)
+      }
+    }
     return "Imported $count items"
   }
 
@@ -69,7 +76,7 @@ class ManageSystemController(
   }
 
   private fun articlesFolder(): File {
-    return Paths.get(System.getProperty("user.home"), "pubstate-articles").toFile()
+    return Paths.get(System.getProperty("user.home"), "pubstate", "articles").toFile()
   }
 
   companion object {
