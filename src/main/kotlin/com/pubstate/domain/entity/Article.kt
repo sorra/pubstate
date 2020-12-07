@@ -42,6 +42,7 @@ class Article(
     fun listByAuthor(authorId: String): List<Article> {
       return query().where()
           .eq("author", User.ref(authorId))
+          .order("whenCreated desc")
           .findList()
     }
   }
