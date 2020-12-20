@@ -1,6 +1,7 @@
 package com.pubstate.domain.entity
 
 import com.pubstate.domain.enum.FormatType
+import com.pubstate.domain.validator.ArticleValidator
 import com.pubstate.util.UniqueIdUtil
 import io.ebean.Model
 import io.ebean.annotation.SoftDelete
@@ -37,6 +38,12 @@ class Article(
 
   @SoftDelete
   var deleted: Boolean = false
+
+  @PrePersist
+  @PreUpdate
+  fun validate() {
+    ArticleValidator.validate(this)
+  }
 
   companion object : BaseFinder<String, Article>(Article::class.java) {
     fun listByAuthor(authorId: String): List<Article> {
