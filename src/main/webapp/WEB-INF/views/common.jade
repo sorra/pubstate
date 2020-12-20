@@ -53,8 +53,8 @@ mixin articlesList(articles)
     ul#articles
       for article in articles
         li.article
-          a(href="/articles/#{article.id}")
-            h3= article.title
+          h3
+            a(href="/articles/#{article.id}")= article.title
           div
             +userLabel(article.author)
             span &nbsp;#{i18n.getMessage("ui_created_at")}&nbsp;

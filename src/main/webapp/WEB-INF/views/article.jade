@@ -2,11 +2,15 @@ extends layout.jade
 
 block customHeader
   title= article.title
+  style.
+    .article-metadata {
+      margin: 10px 0 10px 0;
+    }
 
 block mainContent
   #article
     h1= article.title
-    div
+    div.article-metadata
       +userLabel(article.author)
       span &nbsp;#{i18n.getMessage("ui_created_at")}&nbsp;
       +humanTimeLabel(article.whenCreated)
