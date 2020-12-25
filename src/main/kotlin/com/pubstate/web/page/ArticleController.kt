@@ -12,11 +12,13 @@ import com.pubstate.web.auth.Auth
 @RequestMapping("/articles")
 class ArticleController : BaseController() {
 
+  private fun getFormat() = param("format", "HTML")
+
   @GetMapping("/new")
-  fun pageForCreate(@RequestParam(defaultValue = MARKDOWN) format: String): ModelAndView {
+  fun pageForCreate(): ModelAndView {
     Auth.checkUid()
     return ModelAndView("write")
-        .addObject("format", format)
+        .addObject("format", getFormat())
   }
 
   @PostMapping
@@ -33,15 +35,14 @@ class ArticleController : BaseController() {
   }
 
   @GetMapping("/{id}/edit")
-  fun pageForEdit(@PathVariable id: String,
-                  @RequestParam(defaultValue = MARKDOWN) format: String): ModelAndView {
+  fun pageForEdit(@PathVariable id: String): ModelAndView {
     Auth.checkUid()
 
     val article = articleService.mustGet(id)
 
     return ModelAndView("write")
         .addObject("article", article)
-        .addObject("format", format)
+        .addObject("format", getFormat())
   }
 
   @PostMapping("/{id}")
@@ -77,8 +78,4 @@ class ArticleController : BaseController() {
   }
 
   private fun String.toEnum(): FormatType = FormatType.valueOf(toUpperCase())
-
-  companion object {
-    const val MARKDOWN = "MARKDOWN"
-  }
 }
