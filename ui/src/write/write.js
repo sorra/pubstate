@@ -82,7 +82,10 @@ class Write {
   createRichtextEditor() {
     tinymce.init({
       selector: '#content-edit',
-      language: 'zh_CN'
+      language: 'zh_CN',
+      plugins: 'advlist autolink link image lists preview code codesample table fullscreen autoresize',
+      menubar: 'view edit insert format table',
+      toolbar: 'undo redo | formatselect | bold italic strikethrough | bullist numlist outdent indent | codesample | removeformat'
     })
 
     return {
