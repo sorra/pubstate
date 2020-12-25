@@ -1,12 +1,20 @@
 import isEqual from 'lodash/isEqual'
 import Common from '../common.js'
 
+
+const EditorSelector = '#content-edit'
+const AutosaveInterval = 3000
+
 class Write {
 
   constructor(element, targetId, draftId) {
     this.$root = $(element)
     this.targetId = targetId
     this.draftId = draftId
+    
+    // treat unchanged data as initial draft
+    this.savedDraft = this.getData(true)
+    this.scheduleAutosave()
 
     this.$root.find('.btn-submit').tooltip({
       placement: 'top',
@@ -17,10 +25,10 @@ class Write {
       this.onSubmit(ev)
     })
 
-    this.contentEditor = this.createEditor()
+    this.editor = this.createEditor()
 
-    this.setupEditorSwitch()
-    this.setupDraftAutosave()
+    this.setupFormatSelect()
+  
   }
 
   onSubmit(ev) {
@@ -59,9 +67,10 @@ class Write {
   }
 
   createEditor() {
-    if ($('#format').val() == 'MARKDOWN') {
+    let format = $('#format').val()
+    if (format == 'MARKDOWN') {
       return this.createMarkdownEditor()
-    } else { // HTML
+    } else if (format == 'HTML') {
       return this.createRichtextEditor()
     }
   }
@@ -69,19 +78,22 @@ class Write {
   createMarkdownEditor() {
     return {
       simplemde: new SimpleMDE({
-        element: $('#content-edit')[0],
+        element: $(EditorSelector)[0],
         autoDownloadFontAwesome: false,
         spellChecker: false
       }),
       getContent: function () {
         return this.simplemde.value()
+      },
+      remove: function() {
+        this.simplemde.toTextArea()
       }
     }
   }
 
   createRichtextEditor() {
     tinymce.init({
-      selector: '#content-edit',
+      selector: EditorSelector,
       language: 'zh_CN',
       plugins: 'advlist autolink link image lists preview code codesample table fullscreen autoresize',
       menubar: 'view edit insert format table',
@@ -91,75 +103,64 @@ class Write {
     return {
       getContent: function () {
         return tinymce.activeEditor.getContent()
+      },
+      remove: function() {
+        tinymce.remove(EditorSelector)
       }
     }
   }
 
-  setupEditorSwitch() {
-    let $switchEditorDialog = $('#switch-editor-dialog')
-
-    $switchEditorDialog.on('show.bs.modal', (event) => {
-      let $link = $(event.relatedTarget)
-      if (this.contentEditor.getContent().length == 0) {
-        window.location = $link.data('url')
-        event.preventDefault()
-      }
-
-      $switchEditorDialog.find('.sure-btn').data('url', $link.data('url'))
-    })
-
-    $switchEditorDialog.find('.sure-btn').click((event) => {
-      window.location = $(event.target).data('url')
+  setupFormatSelect() {
+    $('#format').change((event) => {
+      this.editor.remove()
+      this.editor = this.createEditor()
     })
   }
 
-  getData(isFirstTime) {
+  getData() {
     return {
       format: $('#format').val(),
       title: $('#title-edit').val(),
-      content: isFirstTime ? $('#content-edit').val() : this.contentEditor.getContent()
+      content: this.editor == null ? $('#content-edit').val() : this.editor.getContent()
     }
   }
 
-  setupDraftAutosave() {
-    // treat unchanged data as initial draft
-    let savedDraft = this.getData(true)
+  scheduleAutosave() {
+    setTimeout(() => {
+      this.saveDraft()
+    }, AutosaveInterval)
+  }
 
-    const autosaveInterval = 3000
-
-    let saveDraft = () => {
-      let liveData = this.getData()
-      if (isEqual(liveData, savedDraft)) {
-        setTimeout(saveDraft, autosaveInterval)
-        return
-      }
-
-      let payload = {
-        draftId: this.draftId,
-        targetId: this.targetId,
-        format: liveData.format,
-        title: liveData.title,
-        content: liveData.content,
-        format: liveData.format
-      }
-
-      $.post("/drafts/save", payload)
-        .done(respDraftId => {
-          if (respDraftId) {
-            this.draftId = respDraftId
-            savedDraft = liveData
-            Common.popAlert('Draft is autosaved', 'info', 1000)
-          } else {
-            console.info('Draft autosave skipped')
-          }
-        }).fail(resp => {
-          Common.popAlert('Draft autosave failed: ' + Common.toErrorMsg(resp), 'error')
-        }).always(() => {
-          setTimeout(saveDraft, autosaveInterval)
-        })
+  saveDraft() {
+    let liveData = this.getData()
+    if (isEqual(liveData, this.savedDraft)) {
+      this.scheduleAutosave()
+      return
     }
 
-    setTimeout(saveDraft, autosaveInterval)
+    let payload = {
+      draftId: this.draftId,
+      targetId: this.targetId,
+      format: liveData.format,
+      title: liveData.title,
+      content: liveData.content,
+      format: liveData.format
+    }
+
+    $.post("/drafts/save", payload)
+      .done(respDraftId => {
+        if (respDraftId) {
+          this.draftId = respDraftId
+          this.savedDraft = liveData
+          Common.popAlert('Draft is autosaved', 'info', 1000)
+        } else {
+          console.info('Draft autosave is skipped by the server')
+        }
+      }).fail(resp => {
+        Common.popAlert('Draft autosave failed: ' + Common.toErrorMsg(resp), 'error')
+      }).always(() => {
+        this.scheduleAutosave()
+      })
   }
 }
 

@@ -34,11 +34,11 @@ block mainContent
   form#article(action=action, method='post', data-id=article.id data-draft-id=draftId)
     #header-wrapper
       if !format
-        - var format = article ? article.format : 'MARKDOWN'
-      - var alterFormat = (format == 'MARKDOWN') ? 'HTML' : 'MARKDOWN'
-      a(href='#switch-editor-dialog', data-url='?format=#{alterFormat}', data-toggle='modal')
-        | Switch to #{alterFormat}
-      input#format(name='format', type='hidden', value=format)
+        - var format = article ? article.format : 'HTML'
+      span 编辑器
+      select#format(name="format")
+        option(value='HTML' selected=format=='HTML') 富文本
+        option(value='MARKDOWN' selected=format=='MARKDOWN') Markdown
       input#title-edit(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
     #editor-wrapper
       textarea#content-edit(name='content', placeholder='Content here (No more than 20000 characters)')
@@ -57,9 +57,7 @@ block customFooter
           .modal-footer
             button.sure-btn.btn.btn-primary(type='button') Switch
             button.btn.btn-default(type='button', data-dismiss='modal')=i18n.getMessage("ui_cancel")
-
-    - var editorLibName = (format == 'MARKDOWN') ? 'simplemde.min' : 'tinymce/tinymce.min'
-    +libJs([editorLibName])
+    +libJs(['tinymce/tinymce.min', 'simplemde.min'])
     +distJs(['write'])
     script.
       $(document).ready(function () {
