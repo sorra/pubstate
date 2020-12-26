@@ -111,7 +111,13 @@ class Write {
   }
 
   setupFormatSelect() {
-    $('#format').change((event) => {
+    $('.format-select .dropdown-item').click((event) => {
+      let $target = $(event.target)
+      $target.closest('.format-select').find('.dropdown-toggle').text($target.text())
+      $('#format').val($target.data('value'))
+      $target.hide()
+      $target.siblings().show()
+      
       this.editor.remove()
       this.editor = this.createEditor()
     })

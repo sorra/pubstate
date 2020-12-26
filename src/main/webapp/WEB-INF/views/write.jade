@@ -9,17 +9,16 @@ block customHeader
       margin: auto;
     }
     #header-wrapper {
-      width: 90%;
-      margin: 20px auto;
+      margin: 10px auto;
     }
     #title-edit {
-      width: 67%;
-      margin-left: 100px;
+      margin: 10px auto;
+      width: 100%;
       height: 2em;
       padding: 0.5em;
     }
     #editor-wrapper {
-      margin: 20px auto;
+      margin: 10px auto;
     }
     #content-edit {
       min-height: 35em;
@@ -35,10 +34,15 @@ block mainContent
     #header-wrapper
       if !format
         - var format = article ? article.format : 'HTML'
-      span 编辑器
-      select#format(name="format")
-        option(value='HTML' selected=format=='HTML') 富文本
-        option(value='MARKDOWN' selected=format=='MARKDOWN') Markdown
+      - var formatTexts = {'HTML': '富文本', 'MARKDOWN': 'Markdown'}
+      .format-select.dropdown
+        span 编辑器
+        button.btn.btn-info.btn-sm.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")= formatTexts[format]
+          <span class="caret"></span>
+        .dropdown-menu(aria-labelledby="dropdownMenuButton")
+          a.dropdown-item(href="#", data-value="HTML", style="#{format=='HTML' ? 'display:none' : ''}")= formatTexts['HTML']
+          a.dropdown-item(href="#", data-value="MARKDOWN", style="#{format=='MARKDOWN' ? 'display:none' : ''}")= formatTexts['MARKDOWN']
+      input#format(name="format", type="hidden", value=format)
       input#title-edit(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
     #editor-wrapper
       textarea#content-edit(name='content', placeholder='Content here (No more than 20000 characters)')
@@ -48,15 +52,6 @@ block mainContent
     button.btn-submit.btn.btn-primary.pull-right(type='submit')=i18n.getMessage("ui_publish")
 
 block customFooter
-    #switch-editor-dialog.modal.fade(tabindex='-1', role='dialog')
-      .modal-dialog
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal') ×
-            h4.modal-title Switch the editor? (Current inputs won't be saved)
-          .modal-footer
-            button.sure-btn.btn.btn-primary(type='button') Switch
-            button.btn.btn-default(type='button', data-dismiss='modal')=i18n.getMessage("ui_cancel")
     +libJs(['tinymce/tinymce.min', 'simplemde.min'])
     +distJs(['write'])
     script.
