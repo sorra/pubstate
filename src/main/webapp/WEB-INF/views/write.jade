@@ -37,11 +37,12 @@ block mainContent
       - var formatTexts = {'HTML': '富文本', 'MARKDOWN': 'Markdown'}
       .format-select.dropdown
         span 编辑器
-        button.btn.btn-info.btn-sm.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")= formatTexts[format]
-          <span class="caret"></span>
-        .dropdown-menu(aria-labelledby="dropdownMenuButton")
-          a.dropdown-item(href="#", data-value="HTML", style="#{format=='HTML' ? 'display:none' : ''}")= formatTexts['HTML']
-          a.dropdown-item(href="#", data-value="MARKDOWN", style="#{format=='MARKDOWN' ? 'display:none' : ''}")= formatTexts['MARKDOWN']
+        button.dropdown-toggle.btn.btn-info.btn-sm(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")= formatTexts[format]
+        ul.dropdown-menu(aria-labelledby="dropdownMenuButton")
+          li
+            a(href="#", data-value="HTML", style="#{format=='HTML' ? 'display:none' : ''}")= formatTexts['HTML']
+          li
+            a(href="#", data-value="MARKDOWN", style="#{format=='MARKDOWN' ? 'display:none' : ''}")= formatTexts['MARKDOWN']
       input#format(name="format", type="hidden", value=format)
       input#title-edit(name='title', placeholder='Title here (No more than 50 characters)', value=article.title)
     #editor-wrapper
