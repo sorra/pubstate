@@ -17,7 +17,7 @@ class ManageService : HasServices() {
     }
 
     val user = User(email, password, name)
-    user.id = UniqueIdUtil.one()
+    user.id = UniqueIdUtil.initial()
 
     if (lock.tryLock()) {
       try {

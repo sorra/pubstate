@@ -20,7 +20,7 @@ class ArticleTool {
     val type = objectMapper.typeFactory.constructCollectionType(List::class.java, ArticleInfo::class.java)
     return (objectMapper.readValue(articleArrayJson, type) as List<ArticleInfo>).map {
       it.id = UniqueIdUtil.newId()
-      it.authorId = UniqueIdUtil.one()
+      it.authorId = UniqueIdUtil.initial()
       it.save(articleService, null)
     }.count()
   }

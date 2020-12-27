@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserAuthService {
 
-  fun isSystemInitialized() = User.byId(UniqueIdUtil.one()) != null
+  fun isSystemInitialized() = User.byId(UniqueIdUtil.initial()) != null
 
   fun checkLogin(email: String, password: String): User {
     val user = User.byEmail(email)
@@ -23,7 +23,7 @@ class UserAuthService {
   }
 
   fun signup(user: User): String {
-    if (!isSystemInitialized() && user.id != UniqueIdUtil.one()) {
+    if (!isSystemInitialized() && user.id != UniqueIdUtil.initial()) {
       throw DomainException(MessageBundle.getMessage("first_time_need_to_init"))
     }
 

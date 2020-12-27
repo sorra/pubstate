@@ -42,7 +42,7 @@ public final class UniqueIdUtil {
     return new String(encoded, StandardCharsets.US_ASCII);
   }
 
-  public static String one() {
+  public static String initial() {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < 22; i++) {
       sb.append('0');

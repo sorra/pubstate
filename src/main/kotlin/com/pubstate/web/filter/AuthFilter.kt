@@ -17,7 +17,7 @@ class AuthFilter : javax.servlet.Filter {
 
       // Administrator only
       if (request.requestURI.startsWith("/manage/")) {
-        if (Auth.checkUid() != UniqueIdUtil.one()) {
+        if (Auth.checkUid() != UniqueIdUtil.initial()) {
           response.sendError(404)
         }
       }
