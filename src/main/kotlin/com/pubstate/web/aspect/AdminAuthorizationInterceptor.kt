@@ -1,7 +1,6 @@
 package com.pubstate.web.aspect
 
 import com.pubstate.domain.helper.AdminHelper
-import com.pubstate.util.UniqueIdUtil
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.auth.AuthenticatedUtil
 import org.springframework.http.HttpStatus
@@ -30,5 +29,5 @@ class AdminAuthorizationInterceptor : HandlerInterceptor {
     return true
   }
 
-  private fun isAdminUser() = AdminHelper.isAdmin(Auth.uid())
+  private fun isAdminUser() = AdminHelper.isAdmin(Auth.user())
 }

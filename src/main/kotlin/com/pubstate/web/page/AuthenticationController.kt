@@ -102,7 +102,6 @@ class AuthenticationController : BaseController() {
   @RequestMapping("/logout")
   fun logout(): String {
     Auth.logout()
-    logger.info("User[{}] logout successfully.", Auth.uid())
     return "redirect:/login"
   }
 

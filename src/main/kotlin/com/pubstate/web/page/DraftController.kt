@@ -7,25 +7,24 @@ import com.pubstate.domain.enum.FormatType
 import com.pubstate.domain.permission.DraftPermission
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.BaseController
+import com.pubstate.web.auth.Authenticated
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 
+@Authenticated
 @Controller
 @RequestMapping("/drafts")
 class DraftController : BaseController() {
 
   @GetMapping
   fun list(): ModelAndView {
-    val uid = Auth.checkUid()
-    val drafts = Draft.listByAuthor(uid)
+    val drafts = Draft.listByAuthor(Auth.checkUid())
     return ModelAndView("drafts").addObject("drafts", drafts)
   }
 
   @GetMapping("/{id}")
   fun resume(@PathVariable id: String): ModelAndView {
-    val currentUser = userService.currentUser()
-
     val draft = Draft.mustGet(id)
     val article = if (draft.targetId.isEmpty()) {
       Article(
@@ -33,7 +32,7 @@ class DraftController : BaseController() {
           inputContent = draft.inputContent,
           outputContent = "",
           formatType = draft.formatType,
-          author = currentUser
+          author = Auth.checkUser()
       )
     } else {
       Article.mustGet(draft.targetId).apply {
@@ -44,7 +43,7 @@ class DraftController : BaseController() {
     }
 
     return ModelAndView("write")
-        .addObject("artcle", article)
+        .addObject("article", article)
         .addObject("draftId", id)
   }
 
@@ -55,8 +54,6 @@ class DraftController : BaseController() {
            @RequestParam(defaultValue = "") title: String,
            @RequestParam(defaultValue = "") content: String,
            @RequestParam format: String): String {
-    val uid = Auth.checkUid()
-
     if (title.isBlank() && content.isBlank()) {
       return ""
     }
@@ -64,7 +61,7 @@ class DraftController : BaseController() {
     return draftId?.let {
       Draft.byId(it)
     }?.let { draft ->
-      DraftPermission(uid, draft).canEdit()
+      DraftPermission(Auth.checkUid(), draft).canEdit()
       draft.title = title
       draft.inputContent = content
       draft.formatType = format.toEnum()
@@ -73,7 +70,7 @@ class DraftController : BaseController() {
       draft.id
     } ?: let {
       val draft = Draft(
-          author = User.ref(uid),
+          author = Auth.checkUser(),
           targetId = targetId ?: "",
           title = title,
           inputContent = content,

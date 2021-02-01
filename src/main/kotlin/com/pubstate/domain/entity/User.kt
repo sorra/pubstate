@@ -2,7 +2,6 @@ package com.pubstate.domain.entity
 
 import com.pubstate.vo.UserBrief
 import com.pubstate.vo.UserInfo
-import com.pubstate.vo.UserSelf
 import io.ebean.annotation.SoftDelete
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -23,8 +22,6 @@ class User(
   fun toBrief() = UserBrief(id, name, avatar)
 
   fun toInfo() = UserInfo(id, name, avatar, intro)
-
-  fun toSelf() = UserSelf(id, name, avatar)
 
   companion object : BaseFinder<String, User>(User::class.java) {
 

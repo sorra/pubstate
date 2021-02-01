@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
- * Authenticate when required.
+ * Initialize user context and optionally authenticate if required
  * Why HandlerInterceptor instead of Filter?
  * 1. more secure, effective for servlet "forward" and "include"
  * 2. only authenticate handlers, no need to authenticate other things
@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletResponse
 class AuthenticationInterceptor : HandlerInterceptor {
 
   override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-    request.setAttribute("authPack", Auth.AuthPack(request, response))
+    Auth.initialize(request, response)
 
     if (handler is HandlerMethod &&
         AuthenticatedUtil.shouldAuthenticate(handler)) {
-      Auth.checkUid()
+      Auth.checkUser()
     }
 
     return true

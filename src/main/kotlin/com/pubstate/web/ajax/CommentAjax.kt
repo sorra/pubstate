@@ -3,6 +3,7 @@ package com.pubstate.web.ajax
 import com.pubstate.domain.enum.PubType
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.BaseController
+import com.pubstate.web.auth.Authenticated
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,12 +21,11 @@ class CommentAjax : BaseController() {
     return emptyMap<String, Any>()
   }
 
+  @Authenticated
   @PostMapping
   fun create(@RequestParam content: String,
              @RequestParam targetType: String, @RequestParam targetId: String) {
-    val uid = Auth.checkUid()
-
-    commentService.create(uid, content, targetType.toEnum(), targetId)
+    commentService.create(Auth.checkUid(), content, targetType.toEnum(), targetId)
   }
 
   private fun String.toEnum(): PubType = PubType.valueOf(toUpperCase())

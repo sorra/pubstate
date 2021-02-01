@@ -3,6 +3,7 @@ package com.pubstate.web.page
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.BadArgumentException
 import com.pubstate.web.BaseController
+import com.pubstate.web.auth.Auth
 import com.pubstate.web.auth.Authenticated
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,16 +19,14 @@ class ProfileController : BaseController() {
 
   @GetMapping
   fun page(): ModelAndView {
-    val currentUser = userService.currentUser()
-
     return ModelAndView("profile")
-        .addObject("user", currentUser)
+        .addObject("user", Auth.checkUser())
   }
 
   @PostMapping
   @ResponseBody
   fun update(@RequestParam name: String?, @RequestParam intro: String?) {
-    val currentUser = userService.currentUser()
+    val currentUser = Auth.checkUser()
 
     val updatedAttrs = mutableListOf<String>()
     if (name != null) {
@@ -50,17 +49,15 @@ class ProfileController : BaseController() {
 
   @GetMapping("/avatar")
   fun avatar(): ModelAndView {
-    val currentUser = userService.currentUser()
-
     return ModelAndView("change-avatar")
-        .addObject("user", currentUser)
+        .addObject("user", Auth.checkUser())
   }
 
   @PostMapping("/avatar")
   fun updateAvatar(
       @RequestParam(required = false) avatar: MultipartFile?,
       @RequestParam(required = false) color: String?): String {
-    val currentUser = userService.currentUser()
+    val currentUser = Auth.checkUser()
 
     when {
       avatar != null && !avatar.isEmpty -> {

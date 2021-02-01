@@ -3,6 +3,9 @@ package com.pubstate.web.auth;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.method.HandlerMethod;
 
+/**
+ * Reads @Authenticated annotation
+ */
 public class AuthenticatedUtil {
 
   private AuthenticatedUtil() {}

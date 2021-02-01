@@ -11,7 +11,7 @@ class CommentService {
 
   fun create(uid: String, content: String, targetType: PubType, targetId: String): Comment {
     return Comment(
-        author = Ebean.getReference(User::class.java, uid),
+        author = User.ref(uid),
         content = content,
         targetType = targetType,
         targetId = targetId).apply {

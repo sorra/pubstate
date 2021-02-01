@@ -5,7 +5,5 @@ import com.pubstate.util.UniqueIdUtil
 
 object AdminHelper {
 
-  fun isAdmin(userId: String?) = userId == UniqueIdUtil.initial()
-
-  fun isAdmin(user: User?) = isAdmin(user?.id)
+  fun isAdmin(user: User?) = user?.id == UniqueIdUtil.initial()
 }

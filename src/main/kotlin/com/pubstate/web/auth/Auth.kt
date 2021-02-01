@@ -1,11 +1,11 @@
 package com.pubstate.web.auth
 
 import com.pubstate.domain.entity.LoginPass
+import com.pubstate.domain.entity.User
 import org.slf4j.LoggerFactory
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.util.UriUtils
-import java.io.UnsupportedEncodingException
 import java.time.Instant
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
@@ -19,69 +19,86 @@ object Auth {
 
   private const val TOKEN_NAME = "web_token"
 
-  class AuthPack(val request: HttpServletRequest,
-                 val response: HttpServletResponse,
-                 var uid: String? = null)
+  private const val USER_SELF = "userSelf"
 
-  // Always set by authentication aspect
-  private fun current(): AuthPack = RequestContextHolder.currentRequestAttributes()
-      .getAttribute("authPack", RequestAttributes.SCOPE_REQUEST) as AuthPack
+  data class AuthPack(val request: HttpServletRequest, val response: HttpServletResponse)
 
-  fun checkUid(): String = uid() ?: throw RequireLoginException()
-
-  fun uid(): String? {
-    val current = current()
-    if (current.uid != null) {
-      return current.uid
-    }
-
-    current.uid = resolveLoginId(current.request)
-    return current.uid
+  private fun authPack(): AuthPack {
+    return RequestContextHolder.currentRequestAttributes().getAttribute("authPack", RequestAttributes.SCOPE_REQUEST) as AuthPack
   }
 
-  private fun resolveLoginId(request: HttpServletRequest): String? {
+  fun checkUid(): String = checkUser().id
+
+  fun checkUser(): User = user() ?: throw RequireLoginException()
+
+  fun user(): User? = getUserSelf()
+
+  fun initialize(request: HttpServletRequest, response: HttpServletResponse) {
+    request.setAttribute("authPack", AuthPack(request, response))
+
+    resolveTokenUser(request)?.let { user ->
+      setUserSelf(user)
+    }
+  }
+
+  private fun resolveTokenUser(request: HttpServletRequest): User? {
     val token = request.cookies?.find { it.name == TOKEN_NAME }?.value ?: return null
     val loginPass = LoginPass.byId(token) ?: return null
     return if (loginPass.whenToExpire.isAfter(Instant.now())) {
-      loginPass.userId
+      User.mustGet(loginPass.userId)
     } else {
       loginPass.delete()
       null
     }
   }
 
-  fun login(userId: String, rememberMe: Boolean) {
-    val current = current()
+  private fun getUserSelf(): User? {
+    return RequestContextHolder.getRequestAttributes()?.getAttribute(USER_SELF, RequestAttributes.SCOPE_REQUEST) as User?
+  }
 
-    current.request.getSession(false)?.invalidate()
-    val sessionId = current.request.getSession(true).id
+  private fun setUserSelf(user: User) {
+    RequestContextHolder.currentRequestAttributes().setAttribute(USER_SELF, user, RequestAttributes.SCOPE_REQUEST)
+  }
+
+  private fun removeUserSelf() {
+    RequestContextHolder.currentRequestAttributes().removeAttribute(USER_SELF, RequestAttributes.SCOPE_REQUEST)
+  }
+
+  fun login(userId: String, rememberMe: Boolean) {
+    val (request, response) = authPack()
+
+    request.getSession(false)?.invalidate()
+    val sessionId = request.getSession(true).id
 
     val activeSeconds = (if(rememberMe) 7 * 86400 else 86400)
     val whenToExpire = Instant.now().plusSeconds(activeSeconds.toLong())
 
     LoginPass(sessionId, userId, whenToExpire).save()
 
-    current.uid = userId
-    current.response.addCookie(Cookie(TOKEN_NAME, sessionId).apply {
+    response.addCookie(Cookie(TOKEN_NAME, sessionId).apply {
       path = "/"
       maxAge = if (rememberMe) activeSeconds else -1 // -1 = transient
     })
+
+    setUserSelf(User.mustGet(userId))
 
     logger.info("User[{}] login successfully, rememberMe={}", userId, rememberMe)
   }
 
   fun logout() {
-    val current = current()
+    val (request, response) = authPack()
 
-    current.request.cookies?.find { it.name == TOKEN_NAME }?.also {
+    request.cookies?.find { it.name == TOKEN_NAME }?.also {
       LoginPass.deleteById(it.value) // must delete from DB to forbid access
       it.maxAge = 0 // 0 = delete
-      current.response.addCookie(it)
+      response.addCookie(it)
     }
-    current.request.getSession(false)?.invalidate()
+    request.getSession(false)?.invalidate()
 
-    logger.info("User[{}] logout successfully", current.uid)
-    current.uid = null
+    val userId = user()?.id
+    removeUserSelf()
+
+    logger.info("User[{}] logout successfully", userId)
   }
 
   fun getRedirectGoto(requestLink: String): String {
@@ -93,10 +110,6 @@ object Auth {
   }
 
   fun decodeLink(link: String): String {
-    try {
-      return UriUtils.decode(link, "ISO-8859-1")
-    } catch (e: UnsupportedEncodingException) {
-      throw RuntimeException(e)
-    }
+    return UriUtils.decode(link, "ISO-8859-1")
   }
 }

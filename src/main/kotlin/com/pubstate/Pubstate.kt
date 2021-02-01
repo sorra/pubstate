@@ -3,7 +3,7 @@ package com.pubstate
 import com.pubstate.domain.service.ImageService
 import com.pubstate.web.aspect.AdminAuthorizationInterceptor
 import com.pubstate.web.aspect.AuthenticationInterceptor
-import com.pubstate.web.aspect.PageDefaultModelInterceptor
+import com.pubstate.web.aspect.DefaultModelInterceptor
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.web.server.ErrorPage
@@ -45,8 +45,7 @@ class PubState : WebMvcConfigurer {
 
   override fun addInterceptors(registry: InterceptorRegistry) {
     registry.addInterceptor(AuthenticationInterceptor()).addPathPatterns("/**")
-    registry.addInterceptor(PageDefaultModelInterceptor()).addPathPatterns("/**")
-        .excludePathPatterns("/api/**")
+    registry.addInterceptor(DefaultModelInterceptor()).addPathPatterns("/**")
     registry.addInterceptor(AdminAuthorizationInterceptor()).addPathPatterns("/admin/**")
   }
 

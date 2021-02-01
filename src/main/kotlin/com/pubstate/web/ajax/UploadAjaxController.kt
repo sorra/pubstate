@@ -4,6 +4,7 @@ import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.BaseController
+import com.pubstate.web.auth.Authenticated
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/upload")
 class UploadAjaxController : BaseController() {
 
+  @Authenticated
   @PostMapping("/image", produces = ["application/json"])
   @ResponseBody
   fun uploadImage(file: MultipartFile, response: HttpServletResponse): Map<String, String> {
