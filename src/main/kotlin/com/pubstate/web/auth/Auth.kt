@@ -11,6 +11,9 @@ import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Authentication helper
+ */
 object Auth {
   private val logger = LoggerFactory.getLogger(Auth::class.java)
 
@@ -20,7 +23,7 @@ object Auth {
                  val response: HttpServletResponse,
                  var uid: String? = null)
 
-  // Always set by servlet filter
+  // Always set by authentication aspect
   private fun current(): AuthPack = RequestContextHolder.currentRequestAttributes()
       .getAttribute("authPack", RequestAttributes.SCOPE_REQUEST) as AuthPack
 
@@ -32,12 +35,15 @@ object Auth {
       return current.uid
     }
 
-    val token = current.request.cookies?.find { it.name == TOKEN_NAME }?.value ?: return null
-    val loginPass = LoginPass.byId(token) ?: return null
+    current.uid = resolveLoginId(current.request)
+    return current.uid
+  }
 
+  private fun resolveLoginId(request: HttpServletRequest): String? {
+    val token = request.cookies?.find { it.name == TOKEN_NAME }?.value ?: return null
+    val loginPass = LoginPass.byId(token) ?: return null
     return if (loginPass.whenToExpire.isAfter(Instant.now())) {
-      current.uid = loginPass.userId
-      current.uid
+      loginPass.userId
     } else {
       loginPass.delete()
       null
@@ -48,15 +54,13 @@ object Auth {
     val current = current()
 
     current.request.getSession(false)?.invalidate()
-    val tempSession = current.request.getSession(true)
-    val sessionId = tempSession.id
-    tempSession.invalidate()
+    val sessionId = current.request.getSession(true).id
 
     val activeSeconds = (if(rememberMe) 7 * 86400 else 86400)
     val whenToExpire = Instant.now().plusSeconds(activeSeconds.toLong())
 
-    // sessionId不会重复吧? 若重复就要changeSessionId()重新生成了
     LoginPass(sessionId, userId, whenToExpire).save()
+
     current.uid = userId
     current.response.addCookie(Cookie(TOKEN_NAME, sessionId).apply {
       path = "/"
@@ -69,13 +73,12 @@ object Auth {
   fun logout() {
     val current = current()
 
-    val cookie = current.request.cookies?.find { it.name == TOKEN_NAME }?.also {
+    current.request.cookies?.find { it.name == TOKEN_NAME }?.also {
       LoginPass.deleteById(it.value) // must delete from DB to forbid access
       it.maxAge = 0 // 0 = delete
       current.response.addCookie(it)
     }
     current.request.getSession(false)?.invalidate()
-
 
     logger.info("User[{}] logout successfully", current.uid)
     current.uid = null

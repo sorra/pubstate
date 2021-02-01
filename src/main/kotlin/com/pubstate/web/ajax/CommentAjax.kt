@@ -2,7 +2,7 @@ package com.pubstate.web.ajax
 
 import com.pubstate.domain.enum.PubType
 import com.pubstate.web.auth.Auth
-import com.pubstate.web.base.BaseController
+import com.pubstate.web.BaseController
 import org.springframework.web.bind.annotation.*
 
 @RestController

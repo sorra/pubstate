@@ -1,4 +1,4 @@
-package com.pubstate.web.error.handler
+package com.pubstate.web.aspect
 
 import com.pubstate.exception.DomainException
 import com.pubstate.web.auth.RequireLoginException
@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
-import sage.web.error.ApiError
+import sage.web.error.AjaxError
 import javax.servlet.http.HttpServletRequest
 
-@ControllerAdvice(basePackages = [Constants.API_CONTROLLER_PACKAGE])
+@ControllerAdvice(basePackages = [Constants.AJAX_CONTROLLER_PACKAGE])
 @Order(0)
-class ApiExceptionHandler {
+class AjaxExceptionHandler {
   @ExceptionHandler(RequireLoginException::class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   @ResponseBody
-  fun requireLogin(request: HttpServletRequest) = ApiError("Need login")
+  fun requireLogin(request: HttpServletRequest) = AjaxError("Need login")
 
   @ExceptionHandler(DomainException::class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
-  fun domainError(exception: DomainException) = ApiError(exception.message ?: "Unknown error")
+  fun domainError(exception: DomainException) = AjaxError(exception.message ?: "Unknown error")
 }

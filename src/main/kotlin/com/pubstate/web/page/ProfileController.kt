@@ -2,7 +2,8 @@ package com.pubstate.web.page
 
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.BadArgumentException
-import com.pubstate.web.base.BaseController
+import com.pubstate.web.BaseController
+import com.pubstate.web.auth.Authenticated
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.ModelAndView
 
+@Authenticated
 @Controller
 @RequestMapping("/profile")
 class ProfileController : BaseController() {

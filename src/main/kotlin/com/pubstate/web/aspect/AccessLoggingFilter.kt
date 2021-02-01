@@ -1,12 +1,16 @@
-package com.pubstate.web.filter
+package com.pubstate.web.aspect
 
 import org.slf4j.LoggerFactory
+import javax.annotation.Priority
 import javax.servlet.FilterChain
 import javax.servlet.FilterConfig
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
+import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 
+@WebFilter
+@Priority(0)
 class AccessLoggingFilter : javax.servlet.Filter {
   private val logger = LoggerFactory.getLogger(javaClass)
 

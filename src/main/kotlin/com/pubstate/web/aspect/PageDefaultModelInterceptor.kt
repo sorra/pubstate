@@ -1,18 +1,18 @@
-package com.pubstate.web.base
+package com.pubstate.web.aspect
 
 import com.pubstate.domain.entity.User
 import com.pubstate.vo.UserSelf
 import com.pubstate.web.auth.Auth
 import org.slf4j.LoggerFactory
+import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
  * Populates default model attributes to every page
  */
-class PageDefaultModelInterceptor : HandlerInterceptorAdapter() {
+class PageDefaultModelInterceptor : HandlerInterceptor {
 
   override fun postHandle(request: HttpServletRequest, response: HttpServletResponse,
                           handler: Any?, modelAndView: ModelAndView?) {

@@ -1,7 +1,7 @@
 package com.pubstate.web.page
 
+import com.pubstate.web.BaseController
 import com.pubstate.web.auth.Auth
-import com.pubstate.web.base.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

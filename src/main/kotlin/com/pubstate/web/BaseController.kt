@@ -1,4 +1,4 @@
-package com.pubstate.web.base
+package com.pubstate.web
 
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.domain.service.HasServices

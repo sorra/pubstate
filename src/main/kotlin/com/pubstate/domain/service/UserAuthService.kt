@@ -1,6 +1,8 @@
 package com.pubstate.domain.service
 
 import com.pubstate.domain.entity.User
+import com.pubstate.domain.helper.AdminHelper
+import com.pubstate.domain.helper.SystemHelper
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
 import com.pubstate.util.UniqueIdUtil
@@ -10,9 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserAuthService {
 
-  fun isSystemInitialized() = User.byId(UniqueIdUtil.initial()) != null
-
-  fun checkLogin(email: String, password: String): User {
+  fun checkLoginCredential(email: String, password: String): User {
     val user = User.byEmail(email)
 
     if (user != null && checkPassword(password, user.password)) {
@@ -23,7 +23,7 @@ class UserAuthService {
   }
 
   fun signup(user: User): String {
-    if (!isSystemInitialized() && user.id != UniqueIdUtil.initial()) {
+    if (!SystemHelper.isInitialized() && !AdminHelper.isAdmin(user)) {
       throw DomainException(MessageBundle.getMessage("first_time_need_to_init"))
     }
 

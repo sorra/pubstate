@@ -4,8 +4,8 @@ import com.pubstate.domain.entity.User
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.BadArgumentException
 import com.pubstate.exception.DomainException
+import com.pubstate.web.BaseController
 import com.pubstate.web.auth.Auth
-import com.pubstate.web.base.BaseController
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest
 
 
 @Controller
-class AuthController : BaseController() {
+class AuthenticationController : BaseController() {
 
   @GetMapping("/login")
   fun loginPage(@RequestParam(required = false) goto: String?, modelMap: ModelMap): String {
@@ -42,7 +42,7 @@ class AuthController : BaseController() {
     logger.info("Trying login email: {}", email)
 
     Auth.logout()
-    val user = userAuthService.checkLogin(email, password)
+    val user = userAuthService.checkLoginCredential(email, password)
     Auth.login(user.id, rememberMe)
 
     val referer = request.getHeader("referer")
@@ -107,6 +107,6 @@ class AuthController : BaseController() {
   }
 
   companion object {
-    val logger: Logger = LoggerFactory.getLogger(AuthController::class.java)
+    val logger: Logger = LoggerFactory.getLogger(AuthenticationController::class.java)
   }
 }

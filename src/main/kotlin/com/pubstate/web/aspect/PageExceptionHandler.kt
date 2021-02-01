@@ -1,4 +1,4 @@
-package com.pubstate.web.error.handler
+package com.pubstate.web.aspect
 
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.auth.RequireLoginException

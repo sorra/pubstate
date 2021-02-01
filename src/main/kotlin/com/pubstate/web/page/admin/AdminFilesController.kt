@@ -1,15 +1,17 @@
-package com.pubstate.web.page.manage
+package com.pubstate.web.page.admin
 
 import com.pubstate.domain.entity.Image
-import com.pubstate.web.base.BaseController
+import com.pubstate.web.BaseController
+import com.pubstate.web.auth.Authenticated
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
 
+@Authenticated
 @Controller
-@RequestMapping("/manage/files")
-class ManageFilesController : BaseController() {
+@RequestMapping("/admin/files")
+class AdminFilesController : BaseController() {
 
   @GetMapping
   fun list(): ModelAndView {
@@ -18,6 +20,6 @@ class ManageFilesController : BaseController() {
 
     val (files, totalPagesCount) = Image.findPageDescWithTotalPagesCount(pageNum, pageSize)
 
-    return pagedModelAndView("manage-files", "files", files, totalPagesCount, pageNum)
+    return pagedModelAndView("admin-files", "files", files, totalPagesCount, pageNum)
   }
 }

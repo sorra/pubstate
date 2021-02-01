@@ -6,7 +6,7 @@ import com.pubstate.domain.entity.User
 import com.pubstate.domain.enum.FormatType
 import com.pubstate.domain.permission.DraftPermission
 import com.pubstate.web.auth.Auth
-import com.pubstate.web.base.BaseController
+import com.pubstate.web.BaseController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView

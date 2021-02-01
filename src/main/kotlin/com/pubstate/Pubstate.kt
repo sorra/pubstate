@@ -1,16 +1,18 @@
 package com.pubstate
 
 import com.pubstate.domain.service.ImageService
-import com.pubstate.web.base.PageDefaultModelInterceptor
-import com.pubstate.web.filter.AccessLoggingFilter
-import com.pubstate.web.filter.AuthFilter
+import com.pubstate.web.aspect.AdminAuthorizationInterceptor
+import com.pubstate.web.aspect.AuthenticationInterceptor
+import com.pubstate.web.aspect.PageDefaultModelInterceptor
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.web.server.ErrorPage
 import org.springframework.boot.web.server.ErrorPageRegistrar
+import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
 import org.springframework.web.multipart.commons.CommonsMultipartResolver
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -20,6 +22,8 @@ import java.time.Instant
  * Application starter; component scan locator
  */
 @SpringBootApplication
+@ServletComponentScan
+@EnableWebMvc
 class PubState : WebMvcConfigurer {
 
   override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
@@ -40,14 +44,11 @@ class PubState : WebMvcConfigurer {
   }
 
   override fun addInterceptors(registry: InterceptorRegistry) {
-    registry.addInterceptor(PageDefaultModelInterceptor())
+    registry.addInterceptor(AuthenticationInterceptor()).addPathPatterns("/**")
+    registry.addInterceptor(PageDefaultModelInterceptor()).addPathPatterns("/**")
+        .excludePathPatterns("/api/**")
+    registry.addInterceptor(AdminAuthorizationInterceptor()).addPathPatterns("/admin/**")
   }
-
-  @Bean
-  fun accessLoggingFilter() = AccessLoggingFilter()
-
-  @Bean
-  fun authFilter() = AuthFilter()
 
   @Bean
   fun errorPages() = ErrorPageRegistrar { registry ->
@@ -68,6 +69,6 @@ fun main(args: Array<String>) {
   SpringApplication.run(PubState::class.java, *args)
 
   // Show a success message in console, because production logs are not printed in console
-  System.out.println("[${Instant.now()}] Server is started.")
+  println("[${Instant.now()}] Server is started.")
   System.out.flush()
 }

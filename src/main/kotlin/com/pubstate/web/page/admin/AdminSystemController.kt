@@ -1,35 +1,59 @@
-package com.pubstate.web.page.manage
+package com.pubstate.web.page.admin
 
 import com.pubstate.domain.entity.Article
+import com.pubstate.domain.entity.User
+import com.pubstate.domain.helper.SystemHelper
 import com.pubstate.domain.service.ArticleService
-import com.pubstate.domain.service.ManageService
+import com.pubstate.domain.service.UserAuthService
 import com.pubstate.tool.ArticleTool
+import com.pubstate.util.UniqueIdUtil
+import com.pubstate.web.auth.Authenticated
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
-import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.ModelAndView
 import java.io.File
 import java.nio.file.Paths
 
+@Authenticated
 @Controller
-@RequestMapping("/manage/system")
-class ManageSystemController(
-    @Autowired
-    private val manageService: ManageService,
-    @Autowired
+@RequestMapping("/admin/system")
+class AdminSystemController
+@Autowired constructor(
+    private val userAuthService: UserAuthService,
     private val articleService: ArticleService
 ) {
 
+  @Authenticated(false)
   @GetMapping("/init")
-  fun initPage(model: ModelMap): String {
-    model.addAttribute("inited", manageService.isInitialized())
-    return "manage-init"
+  fun initPage(): ModelAndView {
+    if (SystemHelper.isInitialized()) {
+      return pageNotFound()
+    }
+
+    return ModelAndView("admin-init")
+        .addObject("formAction", INIT_PATH)
   }
 
+  @Authenticated(false)
   @PostMapping("/init")
-  fun init(@RequestParam email: String, @RequestParam password: String, @RequestParam name: String): String {
-    manageService.intialize(email, password, name)
-    return "redirect:$INIT_PATH"
+  fun init(@RequestParam email: String, @RequestParam password: String, @RequestParam name: String): ModelAndView {
+    if (SystemHelper.isInitialized()) {
+      return pageNotFound()
+    }
+
+    val user = User(email, password, name)
+    user.id = UniqueIdUtil.initial()
+    userAuthService.signup(user)
+
+    return ModelAndView("redirect:/")
+  }
+
+  private fun pageNotFound(): ModelAndView {
+    return ModelAndView("error")
+        .addObject("errorCode", HttpStatus.NOT_FOUND.value())
+        .addObject("reason", "Page not found")
   }
 
   @RequestMapping("/import-articles")
@@ -80,6 +104,6 @@ class ManageSystemController(
   }
 
   companion object {
-    const val INIT_PATH = "/manage/system/init"
+    const val INIT_PATH = "/admin/system/init"
   }
 }

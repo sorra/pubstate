@@ -1,4 +1,4 @@
-package com.pubstate.web.error
+package com.pubstate.web.page
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping

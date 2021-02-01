@@ -3,7 +3,7 @@ package com.pubstate.web.ajax
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
 import com.pubstate.web.auth.Auth
-import com.pubstate.web.base.BaseController
+import com.pubstate.web.BaseController
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
