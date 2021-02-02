@@ -1,16 +1,18 @@
-package com.pubstate.web.ajax
+package com.pubstate.web.page
 
 import com.pubstate.domain.enum.PubType
 import com.pubstate.web.auth.Auth
 import com.pubstate.web.BaseController
 import com.pubstate.web.auth.Authenticated
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/comments")
-class CommentAjax : BaseController() {
+class CommentController : BaseController() {
 
   @GetMapping
+  @ResponseBody
   fun commentsOf(@RequestParam targetType: String, @RequestParam targetId: String): Map<String, *> {
 //    val page = Comment.commentsOf(targetType.toEnum(), targetId, pageNum(), pageSize())
 
@@ -23,6 +25,7 @@ class CommentAjax : BaseController() {
 
   @Authenticated
   @PostMapping
+  @ResponseBody
   fun create(@RequestParam content: String,
              @RequestParam targetType: String, @RequestParam targetId: String) {
     commentService.create(Auth.checkUid(), content, targetType.toEnum(), targetId)

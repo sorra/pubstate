@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView
 import java.time.Instant
 
 /**
@@ -48,6 +49,9 @@ class PubState : WebMvcConfigurer {
     registry.addInterceptor(DefaultModelInterceptor()).addPathPatterns("/**")
     registry.addInterceptor(AdminAuthorizationInterceptor()).addPathPatterns("/admin/**")
   }
+
+  @Bean("error-json")
+  fun errorJsonView() = MappingJackson2JsonView()
 
   @Bean
   fun errorPages() = ErrorPageRegistrar { registry ->

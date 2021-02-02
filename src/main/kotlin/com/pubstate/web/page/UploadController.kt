@@ -1,4 +1,4 @@
-package com.pubstate.web.ajax
+package com.pubstate.web.page
 
 import com.pubstate.domain.i18n.MessageBundle
 import com.pubstate.exception.DomainException
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Controller
 @RequestMapping("/upload")
-class UploadAjaxController : BaseController() {
+class UploadController : BaseController() {
 
   @Authenticated
   @PostMapping("/image", produces = ["application/json"])
@@ -35,6 +35,6 @@ class UploadAjaxController : BaseController() {
   }
 
   companion object {
-    private val log = LoggerFactory.getLogger(UploadAjaxController::class.java)
+    private val log = LoggerFactory.getLogger(UploadController::class.java)
   }
 }
