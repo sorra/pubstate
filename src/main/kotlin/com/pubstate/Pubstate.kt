@@ -12,7 +12,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
 import org.springframework.web.multipart.commons.CommonsMultipartResolver
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -23,8 +22,7 @@ import java.time.Instant
  * Application starter; component scan locator
  */
 @SpringBootApplication
-@ServletComponentScan
-@EnableWebMvc
+@ServletComponentScan(basePackageClasses = [PubState::class])
 class PubState : WebMvcConfigurer {
 
   override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
